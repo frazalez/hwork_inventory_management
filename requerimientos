@@ -1,0 +1,18 @@
+3 niveles de privilegio: admin, manager, user //done
+permitir crear usuarios //done
+permitir al usuario identificarse //done
+cambiar vista segun nivel de privilegio //done
+permitir crear productos registrando codigo de barra, nombre precio cantidad // listo, refrescar tabla luego de agregar
+permitir modificar productos cambiando nombre,precio,cantidad
+permitir reducir la cantidad de un producto y registrar la reduccion como merma
+permitir inhabilitar un producto
+tabla productos inventario: codigo, nombre, cantidad, precio //done
+ordenar tabla haciendo click en headers
+crear venta especificando codigos de productos
+calcular valor de venta segun productos ingresados 
+registrar automaticamente fecha de venta segun fecha del sistema
+modificar registro de venta
+marcar venta como anulada y revertir cambios
+tener tabla que muestra informacion de ventas: id, precio total, fecha.
+tabla de ventas debe ser expandible y mostrar lista de productos asociados a venta y sus precios
+ordenar ventas por precio total, fecha

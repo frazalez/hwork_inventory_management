@@ -1,0 +1,63 @@
+package views
+
+templ CreateProduct() {
+    <form id="createProduct"
+    hx-post="/create-product"
+    hx-on::after-request="this.reset()"
+    hx-swap="none"
+    class="flex flex-col gap-4 align-middle justify-center">
+        <p class="text-2x1 font-bold">Crear Producto</p>
+        <input required type="text" name="nombre" placeholder="Nombre" class="bg-slate-500 border-slate-700 p-1">        
+        <input required type="text" name="codigo" placeholder="Codigo de barra" class="bg-slate-500 border border-slate-700 p-1">
+        <input required type="text" name="margen" placeholder="Margen de venta" class="bg-slate-500 border border-slate-700 p-1">
+        <input required type="text" name="precio" placeholder="Precio Inicial" class="bg-slate-500 border border-slate-700 p-1">
+        <button type="submit" class="bg-slate-500 bg-opacity-20 border border-slate-700">Crear Producto</button>
+    </form>
+    <p hx-trigger="duplicateError from:body" hx-get="/static/addUserDuplicate.html" id="errorDupe" class="text-red-600 text-center"></p>
+    <p hx-trigger="invalidPrivilegeError from:body" hx-get="/static/addUserInvalid.html" id="errorInvalidPriv" class="text-red-600 text-center"></p>
+    <p hx-trigger="insertError from:body" hx-get="/static/addUserInsert.html" id="errorUserInsert" class="text-red-600 text-center"></p>
+}
+
+templ CreateSale() {
+    <form id="crearUsuario"
+    hx-post="/create-user"
+    hx-confirm="Seguro que quiere crear este usuario?"
+    hx-on::after-request="this.reset()"
+    hx-swap="none"
+    class="flex flex-col gap-4 align-middle justify-center mx-20">
+        <p class="text-3xl font-bold">Crear usuario</p>
+        <input required type="text" name="username" placeholder="usuario" class="bg-slate-500 border-slate-700 p-1">        
+        <input required type="password" name="password" placeholder="password" class="bg-slate-500 border-slate-700 p-1">
+        <select required name="privilege" class="bg-slate-500 border-slate-700 p-1">
+            <option value="admin">Administrador</option>
+            <option value="manager">Gerente</option>
+            <option value="user">Usuario</option>  
+        </select>
+        <button type="submit">Crear Usuario</button>
+    </form>
+    <p hx-trigger="duplicateError from:body" hx-get="/static/addUserDuplicate.html" id="errorDupe" class="text-red-600 text-center"></p>
+    <p hx-trigger="invalidPrivilegeError from:body" hx-get="/static/addUserInvalid.html" id="errorInvalidPriv" class="text-red-600 text-center"></p>
+    <p hx-trigger="insertError from:body" hx-get="/static/addUserInsert.html" id="errorUserInsert" class="text-red-600 text-center"></p>
+}
+
+templ CreatePurchase() {
+    <form id="crearUsuario"
+    hx-post="/create-user"
+    hx-confirm="Seguro que quiere crear este usuario?"
+    hx-on::after-request="this.reset()"
+    hx-swap="none"
+    class="flex flex-col gap-4 align-middle justify-center mx-20">
+        <p class="text-3xl font-bold">Crear usuario</p>
+        <input required type="text" name="username" placeholder="usuario" class="bg-slate-500 border-slate-700 p-1">        
+        <input required type="password" name="password" placeholder="password" class="bg-slate-500 border-slate-700 p-1">
+        <select required name="privilege" class="bg-slate-500 border-slate-700 p-1">
+            <option value="admin">Administrador</option>
+            <option value="manager">Gerente</option>
+            <option value="user">Usuario</option>  
+        </select>
+        <button type="submit">Crear Usuario</button>
+    </form>
+    <p hx-trigger="duplicateError from:body" hx-get="/static/addUserDuplicate.html" id="errorDupe" class="text-red-600 text-center"></p>
+    <p hx-trigger="invalidPrivilegeError from:body" hx-get="/static/addUserInvalid.html" id="errorInvalidPriv" class="text-red-600 text-center"></p>
+    <p hx-trigger="insertError from:body" hx-get="/static/addUserInsert.html" id="errorUserInsert" class="text-red-600 text-center"></p>
+}

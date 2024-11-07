@@ -1,0 +1,128 @@
+package views
+
+import "inventoryManagement/model"
+import "strconv"
+
+
+templ ProductsTable(contents []model.Producto) {
+    <table class="table-auto overflow-y-scroll bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
+        <tr class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
+            <td class="border-slate-800 border p-4">ID</td>
+            <td class="border-slate-800 border p-4">Nombre</td>
+            <td class="border-slate-800 border p-4">Codigo</td>
+            <td class="border-slate-800 border p-4">Margen</td>
+            <td class="border-slate-800 border p-4">Precio</td>
+            <td class="border-slate-800 border p-4">Activo</td>
+        </tr>
+    for i := range contents {
+        <tr class="border-collapse border-slate-800 border">
+            <td class="border-slate-800 border p-4">{strconv.FormatInt(contents[i].Producto_id, 10)}</td>
+            <td class="border-slate-800 border p-4">{contents[i].Producto_nombre}</td>
+            <td class="border-slate-800 border p-4">{strconv.FormatInt(contents[i].Producto_codigo, 10)}</td>
+            <td class="border-slate-800 border p-4">{strconv.FormatFloat(contents[i].Producto_margen, 'f', 5, 64)}</td>
+            <td class="border-slate-800 border p-4">{strconv.FormatFloat(contents[i].Producto_precio, 'f', 5, 64)}</td>
+            <td class="border-slate-800 border p-4">{strconv.FormatBool(contents[i].Producto_activado)}</td>
+        </tr>
+    }
+    </table>
+}
+
+templ ProductsTableManager(contents []model.Producto) {
+    <table class="table-auto overflow-y-scroll bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
+        <tr class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
+            <td class="border-slate-800 border p-4">ID</td>
+            <td class="border-slate-800 border p-4">Nombre</td>
+            <td class="border-slate-800 border p-4">Codigo</td>
+            <td class="border-slate-800 border p-4">Margen</td>
+            <td class="border-slate-800 border p-4">Precio</td>
+            <td class="border-slate-800 border p-4">Activo</td>
+        </tr>
+    for i := range contents {
+        <tr class="border-collapse border-slate-800 border">
+            <td class="border-slate-800 border p-4">{strconv.FormatInt(contents[i].Producto_id, 10)}</td>
+            <td class="border-slate-800 border p-4">{contents[i].Producto_nombre}</td>
+            <td class="border-slate-800 border p-4">{strconv.FormatInt(contents[i].Producto_codigo, 10)}</td>
+            <td class="border-slate-800 border p-4">{strconv.FormatFloat(contents[i].Producto_margen, 'f', 5, 64)}</td>
+            <td class="border-slate-800 border p-4">{strconv.FormatFloat(contents[i].Producto_precio, 'f', 5, 64)}</td>
+            <td class="border-slate-800 border p-4">{strconv.FormatBool(contents[i].Producto_activado)}</td>
+        </tr>
+    }
+    </table>
+
+    @CreateProduct()
+
+}
+
+templ ProductsTableAdmin(contents []model.Producto) {
+    <table class="table-auto overflow-y-scroll bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
+        <tr class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
+            <td class="border-slate-800 border p-4">ID</td>
+            <td class="border-slate-800 border p-4">Nombre</td>
+            <td class="border-slate-800 border p-4">Codigo</td>
+            <td class="border-slate-800 border p-4">Margen</td>
+            <td class="border-slate-800 border p-4">Precio</td>
+            <td class="border-slate-800 border p-4">Activo</td>
+        </tr>
+    for i := range contents {
+        <tr class="border-collapse border-slate-800 border">
+            <td class="border-slate-800 border p-4">{strconv.FormatInt(contents[i].Producto_id, 10)}</td>
+            <td class="border-slate-800 border p-4">{contents[i].Producto_nombre}</td>
+            <td class="border-slate-800 border p-4">{strconv.FormatInt(contents[i].Producto_codigo, 10)}</td>
+            <td class="border-slate-800 border p-4">{strconv.FormatFloat(contents[i].Producto_margen, 'f', 5, 64)}</td>
+            <td class="border-slate-800 border p-4">{strconv.FormatFloat(contents[i].Producto_precio, 'f', 5, 64)}</td>
+            <td class="border-slate-800 border p-4">{strconv.FormatBool(contents[i].Producto_activado)}</td>
+        </tr>
+    }
+    </table>
+
+    @CreateProduct()
+}
+
+templ SellTable(contents []model.Producto_salida_join) {
+    <table class="table-auto overflow-y-scroll bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
+        <tr class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
+            <td class="border-slate-800 border p-4">Nombre</td>
+            <td class="border-slate-800 border p-4">Codigo</td>
+            <td class="border-slate-800 border p-4">Precio Venta</td>
+            <td class="border-slate-800 border p-4">Cantidad</td>
+            <td class="border-slate-800 border p-4">Tipo Salida</td>
+            <td class="border-slate-800 border p-4">Fecha</td>
+            <td class="border-slate-800 border p-4">Usuario Salida</td>
+        </tr>
+    for i := range contents {
+        <tr class="border-collapse border-slate-800 border">
+            <td class="border-slate-800 border p-4">{contents[i].Nombre}</td>
+            <td class="border-slate-800 border p-4">{strconv.FormatInt(contents[i].Codigo, 10)}</td>
+            <td class="border-slate-800 border p-4">{strconv.FormatInt(contents[i].PrecioVenta, 10)}</td>
+            <td class="border-slate-800 border p-4">{strconv.FormatInt(contents[i].Cantidad, 10)}</td>
+            <td class="border-slate-800 border p-4">{contents[i].TipoSalida}</td>
+            <td class="border-slate-800 border p-4">{contents[i].Fecha}</td>
+            <td class="border-slate-800 border p-4">{contents[i].UsuarioSalida}</td>
+        </tr>
+    }
+    </table>
+}
+
+templ PurchaseTable(contents []model.Producto_entrada_join) {
+    <table class="table-auto overflow-y-scroll bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
+        <tr class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
+            <td class="border-slate-800 border p-4">Nombre</td>
+            <td class="border-slate-800 border p-4">Codigo</td>
+            <td class="border-slate-800 border p-4">Precio</td>
+            <td class="border-slate-800 border p-4">Cantidad</td>
+            <td class="border-slate-800 border p-4">Fecha</td>
+            <td class="border-slate-800 border p-4">Usuario</td>
+        </tr>
+    for i := range contents {
+        <tr class="border-collapse border-slate-800 border">
+            <td class="border-slate-800 border p-4">{contents[i].Nombre}</td>
+            <td class="border-slate-800 border p-4">{strconv.FormatInt(contents[i].Codigo, 10)}</td>
+            <td class="border-slate-800 border p-4">{strconv.FormatInt(contents[i].Precio, 10)}</td>
+            <td class="border-slate-800 border p-4">{strconv.FormatInt(contents[i].Cantidad, 10)}</td>
+            <td class="border-slate-800 border p-4">{contents[i].Fecha}</td>
+            <td class="border-slate-800 border p-4">{contents[i].Usuario}</td>
+        </tr>
+    }
+    </table>
+}
+

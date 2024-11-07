@@ -1,0 +1,17 @@
+package views
+
+templ navButton(text string, route string) {
+    <button hx-put={route} hx-target="#contents" hx-swap="innerHTML" hx-trigger="click"
+    class="hover:text-xl hover:transition-all transition-all
+    hover:bg-blue-600 hover:bg-opacity-20 px-2 py-1">
+        {text}
+    </button>
+}
+
+templ getButton(text string, route string) {
+    <button hx-post={route} hx-trigger="click"
+    class="hover:text-xl hover:transition-all transition-all
+    hover:bg-blue-600 hover:bg-opacity-20 px-2 py-1">
+        {text}
+    </button>
+}
