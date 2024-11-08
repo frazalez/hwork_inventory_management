@@ -3,7 +3,6 @@ build:
 	env GOOS=linux GOARCH=386 go build -o srv src/main.go
 
 run:
-
 	templ generate
 	go run src/main.go
 

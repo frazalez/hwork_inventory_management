@@ -18,4 +18,8 @@ func DefineRouting(e *echo.Echo) {
 	e.POST("/create-session", CreateSessionHandler)
 	e.POST("/create-user", CreateUserHandler)
 	e.POST("/create-product", CreateProductHandler)
+	e.PUT("/disableProduct", DisableProductHandler)
+	e.PUT("/enableProduct", EnableProductHandler)
+	e.PUT("/modifyProductForm", ModifyProductFormHandler)
+	e.POST("/modifyProduct", ModifyProductHandler)
 }

@@ -67,9 +67,9 @@ func AllProducts(db *sql.DB) ([]Producto, error) {
 
 func AllSales(db *sql.DB) ([]Producto_salida_join, error) {
 	var productos []Producto_salida_join
-	rows, err := db.Query(`select p.producto_nombre, p.producto_codigo, ps.pro_sal_precio, ps.pro_sal_cantidad , st.salida_tipo_nombre,  s.salida_fecha , u.usuario_nombre 
-	from productos p join producto_salida ps on p.producto_id = ps.pro_sal_producto 
-	JOIN salida_tipo st on ps.pro_sal_tipo = st.salida_tipo_id JOIN salida s 
+	rows, err := db.Query(`select p.producto_nombre, p.producto_codigo, ps.pro_sal_precio, ps.pro_sal_cantidad , st.salida_tipo_nombre,  s.salida_fecha , u.usuario_nombre
+	from productos p join producto_salida ps on p.producto_id = ps.pro_sal_producto
+	JOIN salida_tipo st on ps.pro_sal_tipo = st.salida_tipo_id JOIN salida s
 	on ps.pro_sal_venta = s.salida_id JOIN usuarios u on s.salida_usuario = u.usuario_id`)
 	if err != nil {
 		return nil, fmt.Errorf("AllSales: %v", err)
@@ -92,8 +92,8 @@ func AllSales(db *sql.DB) ([]Producto_salida_join, error) {
 }
 func AllPurchases(db *sql.DB) ([]Producto_entrada_join, error) {
 	var productos []Producto_entrada_join
-	rows, err := db.Query(`select p.producto_nombre, p.producto_codigo, pe.pro_ent_precio , pe.pro_ent_cantidad , e.entrada_fecha , u.usuario_nombre 
-	from productos p join producto_entrada pe on p.producto_id = pe.pro_ent_pro_fk 
+	rows, err := db.Query(`select p.producto_nombre, p.producto_codigo, pe.pro_ent_precio , pe.pro_ent_cantidad , e.entrada_fecha , u.usuario_nombre
+	from productos p join producto_entrada pe on p.producto_id = pe.pro_ent_pro_fk
 	JOIN entrada e on pe.pro_ent_fk = e.entrada_id JOIN usuarios u on e.entrada_usuario = u.usuario_id`)
 	if err != nil {
 		return nil, fmt.Errorf("allPurchases: %v", err)
@@ -127,7 +127,7 @@ func Authenticate(username, password string, c echo.Context) (bool, error) {
 	}
 
 	rows := DB.QueryRow(`SELECT u.usuario_nombre, u.usuario_pass, u.usuario_activo, p.privilegio_nombre FROM usuarios u
-JOIN privilegios p on p.privilegio_id = u.usuario_privilegio 
+JOIN privilegios p on p.privilegio_id = u.usuario_privilegio
 WHERE u.usuario_nombre = ?`, username)
 
 	if err := rows.Scan(&realData.Usuario, &realData.Passwd, &realData.Activo, &realData.Privilegio); err != nil {
@@ -182,7 +182,7 @@ func AddNewUser(c echo.Context, usr string, pwd string, priv string) error {
 		return fmt.Errorf("AddNewUser query: %v", queryError)
 	}
 
-	_, err := DB.Exec(`INSERT INTO usuarios (usuario_nombre, usuario_pass, usuario_activo, usuario_privilegio) 
+	_, err := DB.Exec(`INSERT INTO usuarios (usuario_nombre, usuario_pass, usuario_activo, usuario_privilegio)
 	VALUES (?,?,?,?)`, usr, pwd, 1, privInt)
 
 	if err != nil {
@@ -214,5 +214,42 @@ func AddNewProduct(c echo.Context, name string, code int64, margin float64, pric
 		}
 	}
 
+	return nil
+}
+
+func DisableProduct(id int64) error {
+
+	DB.QueryRow(`update productos set producto_activado = 0 where producto_id = ?;`, id)
+	return nil
+}
+
+func EnableProduct(id int64) error {
+	DB.QueryRow(`update productos set producto_activado = 1 where producto_id = ?;`, id)
+	return nil
+}
+
+func ModifyProduct(ogName string, name string, code int64, margin float64, price float64) error {
+	print(name)
+	print("\n")
+	idQuery := DB.QueryRow(`SELECT producto_codigo FROM productos p WHERE p.producto_nombre = ?`, ogName)
+	var id int
+	if idQErr := idQuery.Scan(&id); idQErr != nil {
+		println("error?")
+		return fmt.Errorf("ModifyProduct IdQuery Scan: %v", idQErr)
+	}
+	fmt.Println(ogName, name, code, margin, price, id)
+	print("\n")
+	updateQuery := DB.QueryRow(`
+    UPDATE productos p SET
+    p.producto_nombre = ?,
+    p.producto_codigo = ?,
+    p.producto_margen = ?,
+    p.producto_precio = ?
+    WHERE p.producto_codigo = ?;`, name, code, margin, price, id)
+
+	if UQErr := updateQuery.Scan(); UQErr != nil {
+		fmt.Printf("ModifyProduct Update: %v \n", UQErr)
+	}
+	print("???2\n")
 	return nil
 }

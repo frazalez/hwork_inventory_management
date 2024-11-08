@@ -95,10 +95,12 @@ func CreateProductHandler(c echo.Context) error {
 	}
 
 	if err := model.AddNewProduct(c, nombre, codigo, margen, precio); err != nil {
+		fmt.Printf("CreateProductHandler AddNewProduct: %v", err)
 		c.Response().Header().Add("HX-Trigger", "createProductError")
 		return c.NoContent(http.StatusBadRequest)
 	}
 
+	c.Response().Header().Add("HX-Trigger", "refreshTable")
 	return c.NoContent(http.StatusOK)
 }
 
@@ -190,4 +192,83 @@ func CreateUserHandler(c echo.Context) error {
 	}
 
 	return c.NoContent(http.StatusOK)
+}
+
+func DisableProductHandler(c echo.Context) error {
+	product := c.Request().FormValue("productId")
+	productId, err := strconv.ParseInt(product, 10, 64)
+	if err != nil {
+		fmt.Printf("DisableProduct ParseIntError: %v", err)
+		return c.NoContent(http.StatusBadRequest)
+	}
+
+	if err := model.DisableProduct(productId); err != nil {
+		fmt.Printf("DisableProduct DatabaseError: %v", err)
+		return c.NoContent(http.StatusBadRequest)
+	}
+
+	c.Response().Header().Add("HX-Trigger", "refreshTable")
+	return c.NoContent(http.StatusOK)
+}
+
+func EnableProductHandler(c echo.Context) error {
+	product := c.Request().FormValue("productId")
+	productId, err := strconv.ParseInt(product, 10, 64)
+	if err != nil {
+		fmt.Printf("EnableProduct ParseIntError: %v", err)
+		return c.NoContent(http.StatusBadRequest)
+	}
+
+	if err := model.EnableProduct(productId); err != nil {
+		fmt.Printf("EnableProduct DatabaseError: %v", err)
+		return c.NoContent(http.StatusBadRequest)
+	}
+
+	c.Response().Header().Add("HX-Trigger", "refreshTable")
+	return c.NoContent(http.StatusOK)
+}
+
+func ModifyProductFormHandler(c echo.Context) error {
+	view := views.ModifyProduct(
+		c.FormValue("name"),
+		c.FormValue("code"),
+		c.FormValue("margin"),
+		c.FormValue("price"))
+	if err := view.Render(getParams(c)); err != nil {
+		fmt.Printf("ModifyProductFormHandler: %v", err)
+		return c.NoContent(http.StatusBadRequest)
+	}
+	print("RAAA \n")
+	return nil
+}
+
+func ModifyProductHandler(c echo.Context) error {
+	ogName := c.FormValue("ogName")
+	name := c.FormValue("name")
+	code, codeErr := strconv.ParseInt(c.Request().FormValue("code"), 10, 64)
+	if codeErr != nil {
+		fmt.Printf("ModifyProduct ParseIntCode: %v", codeErr)
+		return c.NoContent(http.StatusBadRequest)
+	}
+
+	margin, marginErr := strconv.ParseFloat(c.FormValue("margin"), 64)
+	if codeErr != nil {
+		fmt.Printf("ModifyProduct ParseFloatMargin: %v", marginErr)
+		return c.NoContent(http.StatusBadRequest)
+	}
+
+	price, priceErr := strconv.ParseFloat(c.FormValue("code"), 64)
+	if priceErr != nil {
+		fmt.Printf("ModifyProduct ParseFloatPrice: %v", priceErr)
+		return c.NoContent(http.StatusBadRequest)
+	}
+
+	if err := model.ModifyProduct(ogName, name, code, margin, price); err != nil {
+		fmt.Printf("ModifyProduct DBInsert: %v", err)
+		return c.NoContent(http.StatusBadRequest)
+	}
+
+	c.Response().Header().Add("HX-Trigger", "refreshTable")
+	return nil
+
 }

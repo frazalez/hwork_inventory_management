@@ -2,10 +2,10 @@
 permitir crear usuarios //done
 permitir al usuario identificarse //done
 cambiar vista segun nivel de privilegio //done
-permitir crear productos registrando codigo de barra, nombre precio cantidad // listo, refrescar tabla luego de agregar
-permitir modificar productos cambiando nombre,precio,cantidad
+permitir crear productos registrando codigo de barra, nombre precio cantidad // listo, refrescar tabla luego de agregar //listo
+permitir modificar productos cambiando nombre,precio,cantidad //TODO
 permitir reducir la cantidad de un producto y registrar la reduccion como merma
-permitir inhabilitar un producto
+permitir inhabilitar un producto //listo
 tabla productos inventario: codigo, nombre, cantidad, precio //done
 ordenar tabla haciendo click en headers
 crear venta especificando codigos de productos
