@@ -3,6 +3,25 @@ package views
 import "inventoryManagement/model"
 import "strconv"
 
+templ ProductsTableSmall(contents []model.ProductSmall) {
+<div class="max-h-[80vh] overflow-y-auto">
+    <table id="productsTable" class="max-h-60 overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
+        <tr class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
+            <td class="border-slate-800 border p-2">Nombre</td>
+            <td class="border-slate-800 border p-2">Codigo</td>
+            <td class="border-slate-800 border p-2">Precio</td>
+        </tr>
+    for i := range contents {
+        <tr class="border-collapse border-slate-800 border">
+            <td class="border-slate-800 border p-2">{contents[i].Producto_nombre}</td>
+            <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Producto_codigo, 10)}</td>
+            <td class="border-slate-800 border p-2">{strconv.FormatFloat(contents[i].Producto_precio, 'f', 5, 64)}</td>
+        </tr>
+    }
+    </table>
+</div>
+}
+
 
 templ ProductsTable(contents []model.Producto) {
 <div class="max-h-80 overflow-y-auto">
@@ -129,28 +148,22 @@ templ ProductsTableAdmin(contents []model.Producto) {
 }
 
 templ SellTable(contents []model.Producto_salida_join) {
-    <table class="table-auto overflow-y-scroll bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
-        <tr class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
-            <td class="border-slate-800 border p-2">Nombre</td>
-            <td class="border-slate-800 border p-2">Codigo</td>
-            <td class="border-slate-800 border p-2">Precio Venta</td>
-            <td class="border-slate-800 border p-2">Cantidad</td>
-            <td class="border-slate-800 border p-2">Tipo Salida</td>
-            <td class="border-slate-800 border p-2">Fecha</td>
-            <td class="border-slate-800 border p-2">Usuario Salida</td>
-        </tr>
-    for i := range contents {
-        <tr class="border-collapse border-slate-800 border">
-            <td class="border-slate-800 border p-2">{contents[i].Nombre}</td>
-            <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Codigo, 10)}</td>
-            <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].PrecioVenta, 10)}</td>
-            <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Cantidad, 10)}</td>
-            <td class="border-slate-800 border p-2">{contents[i].TipoSalida}</td>
-            <td class="border-slate-800 border p-2">{contents[i].Fecha}</td>
-            <td class="border-slate-800 border p-2">{contents[i].UsuarioSalida}</td>
-        </tr>
-    }
-    </table>
+<div class="max-h-[80vh] overflow-y-auto">
+<div id="productsTableDiv" name="productsTable">
+    @SalesTableOnly(contents)
+</div>
+    <button id="viewSales"
+    name="viewSales"
+    hx-get="/get-sales-table"
+    hx-target="#productsTableDiv"
+    hx-swap="innerHTML"
+    class="bg-slate-500 bg-opacity-20 border border-slate-700 p-2">
+        Ver ventas
+    </button>
+</div>
+
+    <div id="makeSaleDiv" class="place-self-end">@CreateSale()</div>
+    <div id="productSearchSmall"></div>
 }
 
 templ PurchaseTable(contents []model.Producto_entrada_join) {
@@ -171,6 +184,31 @@ templ PurchaseTable(contents []model.Producto_entrada_join) {
             <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Cantidad, 10)}</td>
             <td class="border-slate-800 border p-2">{contents[i].Fecha}</td>
             <td class="border-slate-800 border p-2">{contents[i].Usuario}</td>
+        </tr>
+    }
+    </table>
+}
+
+templ SalesTableOnly(contents []model.Producto_salida_join) {
+    <table id="productsTable" class="max-h-60 overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
+        <tr class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
+            <td class="border-slate-800 border p-2">Nombre</td>
+            <td class="border-slate-800 border p-2">Codigo</td>
+            <td class="border-slate-800 border p-2">Precio Venta</td>
+            <td class="border-slate-800 border p-2">Cantidad</td>
+            <td class="border-slate-800 border p-2">Tipo Salida</td>
+            <td class="border-slate-800 border p-2">Fecha</td>
+            <td class="border-slate-800 border p-2">Usuario Salida</td>
+        </tr>
+    for i := range contents {
+        <tr class="border-collapse border-slate-800 border">
+            <td class="border-slate-800 border p-2">{contents[i].Nombre}</td>
+            <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Codigo, 10)}</td>
+            <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].PrecioVenta, 10)}</td>
+            <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Cantidad, 10)}</td>
+            <td class="border-slate-800 border p-2">{contents[i].TipoSalida}</td>
+            <td class="border-slate-800 border p-2">{contents[i].Fecha}</td>
+            <td class="border-slate-800 border p-2">{contents[i].UsuarioSalida}</td>
         </tr>
     }
     </table>

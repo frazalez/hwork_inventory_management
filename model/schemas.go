@@ -87,3 +87,9 @@ type Producto struct {
 	Producto_precio   float64
 	Producto_activado bool
 }
+
+type ProductSmall struct {
+	Producto_codigo      int64
+	Producto_nombre   string
+	Producto_precio   float64
+}

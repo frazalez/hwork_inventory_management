@@ -171,9 +171,11 @@ func CreateSessionHandler(c echo.Context) error {
 	pwd := c.FormValue("password")
 
 	if ok, err := model.Authenticate(usr, pwd, c); err != nil {
+		fmt.Println(err)
 		c.Response().Header().Add("HX-Trigger", "loginFailed")
 		return c.NoContent(http.StatusForbidden)
 	} else if !ok {
+		fmt.Println("Login Failed")
 		c.Response().Header().Add("HX-Trigger", "loginFailed")
 		return c.NoContent(http.StatusForbidden)
 	}
@@ -271,4 +273,99 @@ func ModifyProductHandler(c echo.Context) error {
 	c.Response().Header().Add("HX-Trigger", "refreshTable")
 	return nil
 
+}
+
+func SmallTableSearchHandler(c echo.Context) error {
+	fmt.Println("test")
+	code, codeErr := strconv.ParseInt(c.FormValue("barcode"), 10, 64)
+	if codeErr != nil {
+		fmt.Printf("SmallTableSearch ParseIntCode: %v", codeErr)
+		c.Response().Header().Add("HX-Trigger", "cancel")
+		return c.NoContent(http.StatusBadRequest)
+	}
+
+	data, dataErr := model.GetSmallTable(code)
+	if dataErr != nil {
+		fmt.Printf("SmallTableSearch DatabaseError: %v", dataErr)
+		c.Response().Header().Add("HX-Trigger", "cancel")
+		return c.NoContent(http.StatusBadRequest)
+	}
+
+	return views.ProductsTableSmall(data).Render(getParams(c))
+}
+
+//falta agregar sumatoria a la venta
+//falta agregar boton de confirmacion a venta}
+//falta agregar mensaje que indica venta en proceso
+func CreateSaleHandler(c echo.Context) error {
+	barcode, bcErr := strconv.ParseInt(c.FormValue("barcode"), 10, 64)
+	if bcErr != nil {
+		fmt.Printf("CreateSale ParseIntCode: %v", bcErr)
+		c.Response().Header().Add("HX-Trigger", "cancel")		
+		return c.NoContent(http.StatusBadRequest)
+	}
+
+	quantity, qErr := strconv.ParseInt(c.FormValue("quantity"), 10, 64)
+	if qErr != nil {
+		fmt.Printf("CreateSale ParseIntQuantity: %v", qErr)
+		c.Response().Header().Add("HX-Trigger", "cancel")		
+		return c.NoContent(http.StatusBadRequest)
+	}
+
+	saleType, sErr:= strconv.ParseInt(c.FormValue("type"), 10, 64)
+	if sErr != nil {
+		fmt.Printf("CreateSale ParseIntType: %v", qErr)
+		c.Response().Header().Add("HX-Trigger", "cancel")		
+		return c.NoContent(http.StatusBadRequest)
+	}
+
+	err := model.AddToSale(barcode, quantity, saleType)
+	if err != nil {
+		fmt.Printf("CreateSale DatabaseError: %v", err)
+		c.Response().Header().Add("HX-Trigger", "cancel")		
+		return c.NoContent(http.StatusBadRequest)
+	}
+
+	newTable, ntErr := model.GetSaleTransactionTable()
+	if ntErr != nil {
+		fmt.Printf("GetSaleTransactionTable DatabaseError: %v", ntErr)
+		c.Response().Header().Add("HX-Trigger", "cancel")		
+		return c.NoContent(http.StatusBadRequest)
+	}
+	return views.SalesTableOnly(newTable).Render(getParams(c))
+}
+
+func TablesSalesHandler (c echo.Context) error {
+	usrCookie, usrCookieError := c.Cookie("usrtype")
+	loginCookie, loginCookieError := c.Cookie("login")
+
+	if usrCookieError != nil || loginCookieError != nil {
+		return c.Redirect(http.StatusSeeOther, "/login")
+	}
+
+	tables, err := model.AllSales(model.DB)
+	if err != nil {
+		log.Printf("TablesSalesHandler: %v", err)
+		return c.NoContent(http.StatusBadRequest)
+	}
+
+	for i := range tables {
+		fmt.Printf("%v %v %v %v", tables[i].Nombre, tables[i].Codigo, tables[i].PrecioVenta, tables[i].Cantidad)
+	}
+	if loginCookie.Value == "yes" && usrCookie.Value == "admin" || usrCookie.Value == "user" || usrCookie.Value == "manager" {
+		return views.SalesTableOnly(tables).Render(getParams(c))
+	} else {
+		return c.Redirect(http.StatusSeeOther, "/login")
+	}
+
+}
+
+func StartSaleHandler (c echo.Context) error {
+	table := []model.Producto_salida_join{}
+	if err := model.StartSale(); err != nil {
+		fmt.Printf("StartSale DatabaseError: %v", err)
+		c.Response().Header().Add("HX-Trigger", "cancel")
+		return c.NoContent(http.StatusBadRequest)
+	}
+	return views.SalesTableOnly(table).Render(getParams(c))
 }

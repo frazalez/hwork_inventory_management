@@ -22,4 +22,8 @@ func DefineRouting(e *echo.Echo) {
 	e.PUT("/enableProduct", EnableProductHandler)
 	e.PUT("/modifyProductForm", ModifyProductFormHandler)
 	e.POST("/modifyProduct", ModifyProductHandler)
+	e.POST("/small-table-search", SmallTableSearchHandler)
+	e.GET("/get-sales-table", TablesSalesHandler)
+	e.POST("/start-sale", StartSaleHandler)
+	e.POST("/create-sale", CreateSaleHandler)
 }

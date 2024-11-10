@@ -1,4 +1,31 @@
 {
     "terminal.integrated.gpuAcceleration": "off",
-    "workbench.externalBrowser": "zen-browser"
+    "workbench.externalBrowser": "",
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MariaDB",
+            "name": "mariadb connection",
+            "database": "inventario",
+            "username": "root",
+            "password": "admin"
+        }
+    ],
+    "editor.formatOnSave": true,
+    "go.inlayHints.constantValues": true,
+    "go.inlayHints.functionTypeParameters": true,
+    "go.inlayHints.parameterNames": false,
+    "go.inlayHints.rangeVariableTypes": true,
+    "go.lintTool": "golint",
+    "go.playground": {
+        "openbrowser": false
+    },
+    "go.toolsManagement.autoUpdate": true,
+    "templ.http": "localhost:8080"
 }

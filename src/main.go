@@ -20,5 +20,4 @@ func main() {
 	model.DB = model.ConnectToDatabase()
 
 	echoInstance.Logger.Fatal(echoInstance.Start(":8080"))
-
 }

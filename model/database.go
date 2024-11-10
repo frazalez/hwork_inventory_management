@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/go-sql-driver/mysql"
 	"github.com/labstack/echo/v4"
@@ -17,7 +18,7 @@ var DB *sql.DB
 func ConnectToDatabase() *sql.DB {
 
 	cfg := mysql.Config{
-		User:   "sorcerer",
+		User:   "root",
 		Passwd: "admin",
 		Net:    "tcp",
 		Addr:   "localhost",
@@ -40,8 +41,8 @@ func ConnectToDatabase() *sql.DB {
 }
 
 func AllProducts(db *sql.DB) ([]Producto, error) {
-	var productos []Producto
-	rows, err := db.Query("SELECT * FROM productos")
+	var producto []Producto
+	rows, err := db.Query("SELECT * FROM producto")
 	if err != nil {
 		return nil, fmt.Errorf("AllProducts: %v", err)
 	}
@@ -55,22 +56,32 @@ func AllProducts(db *sql.DB) ([]Producto, error) {
 
 			return nil, fmt.Errorf("AllProducts: %v", err)
 		}
-		productos = append(productos, prod)
+		producto = append(producto, prod)
 	}
 
 	if err := rows.Err(); err != nil {
 		return nil, fmt.Errorf("AllProducts: %v", err)
 	}
 
-	return productos, nil
+	return producto, nil
 }
 
 func AllSales(db *sql.DB) ([]Producto_salida_join, error) {
-	var productos []Producto_salida_join
-	rows, err := db.Query(`select p.producto_nombre, p.producto_codigo, ps.pro_sal_precio, ps.pro_sal_cantidad , st.salida_tipo_nombre,  s.salida_fecha , u.usuario_nombre
-	from productos p join producto_salida ps on p.producto_id = ps.pro_sal_producto
-	JOIN salida_tipo st on ps.pro_sal_tipo = st.salida_tipo_id JOIN salida s
-	on ps.pro_sal_venta = s.salida_id JOIN usuarios u on s.salida_usuario = u.usuario_id`)
+	var producto []Producto_salida_join
+	rows, err := db.Query(`select 
+    p.producto_nombre, p.producto_codigo, 
+    ps.pro_sal_precio, ps.pro_sal_cantidad , 
+    st.salida_tipo_nombre,  s.salida_fecha , u.usuario_nombre
+	from 
+    producto p 
+	join 
+    producto_salida ps on p.producto_id = ps.pro_sal_producto
+	JOIN 
+    salida s on ps.pro_sal_salida = s.salida_id
+	JOIN
+    salida_tipo st on s.salida_tipo = st.salida_tipo_id
+	JOIN
+    usuario u on s.salida_usuario = u.usuario_id;`)
 	if err != nil {
 		return nil, fmt.Errorf("AllSales: %v", err)
 	}
@@ -81,20 +92,21 @@ func AllSales(db *sql.DB) ([]Producto_salida_join, error) {
 		if err := rows.Scan(&prod.Nombre, &prod.Codigo, &prod.PrecioVenta, &prod.Cantidad, &prod.TipoSalida, &prod.Fecha, &prod.UsuarioSalida); err != nil {
 			return nil, fmt.Errorf("AllSales: %v", err)
 		}
-		productos = append(productos, prod)
+		fmt.Println(prod.Cantidad, prod.Codigo, prod.Nombre)
+		producto = append(producto, prod)
 	}
 
 	if err := rows.Err(); err != nil {
 		return nil, fmt.Errorf("AllSales: %v", err)
 	}
 
-	return productos, nil
+	return producto, nil
 }
 func AllPurchases(db *sql.DB) ([]Producto_entrada_join, error) {
-	var productos []Producto_entrada_join
+	var producto []Producto_entrada_join
 	rows, err := db.Query(`select p.producto_nombre, p.producto_codigo, pe.pro_ent_precio , pe.pro_ent_cantidad , e.entrada_fecha , u.usuario_nombre
-	from productos p join producto_entrada pe on p.producto_id = pe.pro_ent_pro_fk
-	JOIN entrada e on pe.pro_ent_fk = e.entrada_id JOIN usuarios u on e.entrada_usuario = u.usuario_id`)
+	from producto p join producto_entrada pe on p.producto_id = pe.pro_ent_pro_fk
+	JOIN entrada e on pe.pro_ent_fk = e.entrada_id JOIN usuario u on e.entrada_usuario = u.usuario_id`)
 	if err != nil {
 		return nil, fmt.Errorf("allPurchases: %v", err)
 	}
@@ -105,14 +117,14 @@ func AllPurchases(db *sql.DB) ([]Producto_entrada_join, error) {
 		if err := rows.Scan(&prod.Nombre, &prod.Codigo, &prod.Precio, &prod.Cantidad, &prod.Fecha, &prod.Usuario); err != nil {
 			return nil, fmt.Errorf("allPurchases: %v", err)
 		}
-		productos = append(productos, prod)
+		producto = append(producto, prod)
 	}
 
 	if err := rows.Err(); err != nil {
 		return nil, fmt.Errorf("allPurchases: %v", err)
 	}
 
-	return productos, nil
+	return producto, nil
 }
 func AllUsers(db *sql.DB) ([]Producto_entrada_join, error) {
 	return nil, nil
@@ -123,29 +135,31 @@ func Authenticate(username, password string, c echo.Context) (bool, error) {
 	var realData UsrAuth
 
 	if strings.ContainsAny(username, "\"`'") || strings.ContainsAny(password, "\"`'") {
-		return false, fmt.Errorf("auth/invalidchars")
 	}
-
-	rows := DB.QueryRow(`SELECT u.usuario_nombre, u.usuario_pass, u.usuario_activo, p.privilegio_nombre FROM usuarios u
-JOIN privilegios p on p.privilegio_id = u.usuario_privilegio
+	
+	rows := DB.QueryRow(`SELECT u.usuario_nombre, u.usuario_psswd, u.usuario_activo, p.privilegio_nombre FROM usuario u
+	JOIN privilegio p on p.privilegio_id = u.usuario_privilegio
 WHERE u.usuario_nombre = ?`, username)
 
-	if err := rows.Scan(&realData.Usuario, &realData.Passwd, &realData.Activo, &realData.Privilegio); err != nil {
-		return false, fmt.Errorf("auth/scan: %v", err)
-	}
+if err := rows.Scan(&realData.Usuario, &realData.Passwd, &realData.Activo, &realData.Privilegio); err != nil {
+	return false, fmt.Errorf("auth/scan: %v", err)
+}
 
-	if realData.Activo == 0 {
-		return false, fmt.Errorf("auth/disableduser")
-	}
+fmt.Printf("%v %v %v %v", realData.Usuario, realData.Passwd, realData.Activo, realData.Privilegio)
 
-	if err := rows.Err(); err != nil {
-		return false, fmt.Errorf("auth/rowserr: %v", err)
-	}
+if realData.Activo == 0 {
+	return false, fmt.Errorf("auth/disableduser")
+}
 
-	if subtle.ConstantTimeCompare([]byte(username), []byte(realData.Usuario)) == 1 &&
-		subtle.ConstantTimeCompare([]byte(password), []byte(realData.Passwd)) == 1 {
+if err := rows.Err(); err != nil {
+	return false, fmt.Errorf("auth/rowserr: %v", err)
+}
 
-		c.SetCookie(&http.Cookie{
+if subtle.ConstantTimeCompare([]byte(username), []byte(realData.Usuario)) == 1 &&
+subtle.ConstantTimeCompare([]byte(password), []byte(realData.Passwd)) == 1 {
+	
+	return false, fmt.Errorf("auth/invalidchars")
+	c.SetCookie(&http.Cookie{
 			Name:     "usrtype",
 			Value:    realData.Privilegio, //admin, user, manager validos.
 			Path:     "/",
@@ -168,7 +182,7 @@ WHERE u.usuario_nombre = ?`, username)
 }
 
 func AddNewUser(c echo.Context, usr string, pwd string, priv string) error {
-	verifyQuery := DB.QueryRow(`SELECT usuario_nombre FROM usuarios WHERE usuario_nombre = ?`, usr)
+	verifyQuery := DB.QueryRow(`SELECT usuario_nombre FROM usuario WHERE usuario_nombre = ?`, usr)
 	var dupeUser string
 	if verifyError := verifyQuery.Scan(&dupeUser); verifyError == nil {
 		c.Response().Header().Add("HX-Trigger", "duplicateError")
@@ -182,7 +196,7 @@ func AddNewUser(c echo.Context, usr string, pwd string, priv string) error {
 		return fmt.Errorf("AddNewUser query: %v", queryError)
 	}
 
-	_, err := DB.Exec(`INSERT INTO usuarios (usuario_nombre, usuario_pass, usuario_activo, usuario_privilegio)
+	_, err := DB.Exec(`INSERT INTO usuario (usuario_nombre, usuario_pass, usuario_activo, usuario_privilegio)
 	VALUES (?,?,?,?)`, usr, pwd, 1, privInt)
 
 	if err != nil {
@@ -195,7 +209,7 @@ func AddNewUser(c echo.Context, usr string, pwd string, priv string) error {
 
 func AddNewProduct(c echo.Context, name string, code int64, margin float64, price float64) error {
 	{
-		query := DB.QueryRow(`SELECT producto_id FROM productos WHERE producto_codigo = ?`, code)
+		query := DB.QueryRow(`SELECT producto_id FROM producto WHERE producto_codigo = ?`, code)
 		var row int
 		if err := query.Scan(&row); err == nil {
 			c.Response().Header().Add("HX-Trigger", "duplicateproduct")
@@ -204,7 +218,7 @@ func AddNewProduct(c echo.Context, name string, code int64, margin float64, pric
 	}
 
 	{
-		_, err := DB.Exec(`INSERT INTO productos
+		_, err := DB.Exec(`INSERT INTO producto
 		(producto_nombre, producto_codigo, producto_margen,
 		producto_precio, producto_activado) VALUES
 		(?, ?, ?, ?, ?)`, name, code, margin, price, 1)
@@ -219,28 +233,24 @@ func AddNewProduct(c echo.Context, name string, code int64, margin float64, pric
 
 func DisableProduct(id int64) error {
 
-	DB.QueryRow(`update productos set producto_activado = 0 where producto_id = ?;`, id)
+	DB.QueryRow(`update producto set producto_activado = 0 where producto_id = ?;`, id)
 	return nil
 }
 
 func EnableProduct(id int64) error {
-	DB.QueryRow(`update productos set producto_activado = 1 where producto_id = ?;`, id)
+	DB.QueryRow(`update producto set producto_activado = 1 where producto_id = ?;`, id)
 	return nil
 }
 
 func ModifyProduct(ogName string, name string, code int64, margin float64, price float64) error {
-	print(name)
-	print("\n")
-	idQuery := DB.QueryRow(`SELECT producto_codigo FROM productos p WHERE p.producto_nombre = ?`, ogName)
+	idQuery := DB.QueryRow(`SELECT producto_codigo FROM producto p WHERE p.producto_nombre = ?`, ogName)
 	var id int
 	if idQErr := idQuery.Scan(&id); idQErr != nil {
-		println("error?")
 		return fmt.Errorf("ModifyProduct IdQuery Scan: %v", idQErr)
 	}
 	fmt.Println(ogName, name, code, margin, price, id)
-	print("\n")
 	updateQuery := DB.QueryRow(`
-    UPDATE productos p SET
+    UPDATE producto p SET
     p.producto_nombre = ?,
     p.producto_codigo = ?,
     p.producto_margen = ?,
@@ -250,6 +260,107 @@ func ModifyProduct(ogName string, name string, code int64, margin float64, price
 	if UQErr := updateQuery.Scan(); UQErr != nil {
 		fmt.Printf("ModifyProduct Update: %v \n", UQErr)
 	}
-	print("???2\n")
 	return nil
+}
+
+func GetSmallTable (code int64) ([]ProductSmall, error) {
+	codeStr := fmt.Sprintf("%s%v%s", "%",code,"%")
+	fmt.Println(codeStr)
+	rows, err := DB.Query(`SELECT producto_codigo, producto_nombre, producto_precio FROM producto WHERE producto_codigo LIKE ?`, codeStr)
+	var products []ProductSmall
+	if err != nil {
+		return nil, fmt.Errorf("GetSmallTable: %v", err)
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var prod ProductSmall
+		if err := rows.Scan(&prod.Producto_codigo, &prod.Producto_nombre, &prod.Producto_precio); err != nil {
+			return nil, fmt.Errorf("GetSmallTable Scan: %v", err)
+		}
+		fmt.Println(prod.Producto_codigo, prod.Producto_nombre, prod.Producto_precio)
+		products = append(products, prod)
+	}
+	
+	return products, nil
+}
+
+func StartSale() error {
+	r, err := DB.Exec(
+		`DROP TABLE IF EXISTS transaccion_salida_producto;
+		`)
+
+	r2, err2 := DB.Exec(`CREATE TABLE transaccion_salida_producto (
+			id int(10) primary key auto_increment,
+			name varchar(40),
+			code int(20),
+			price int(10),
+			quantity int(10),
+			type int(1),
+			foreign key (type) references salida_tipo(salida_tipo_id)		
+		);`)
+
+	if err != nil {
+		return fmt.Errorf("StartSale: %v", err)
+	}
+	if err2 != nil {
+		return fmt.Errorf("StartSale: %v", err2)
+	}
+	fmt.Println(r)
+	fmt.Println(r2)
+	return nil
+}
+
+func AddToSale(barcode int64, quantity int64, saletype int64) error {
+	var name string
+	var price int64
+	q, qErr := DB.Query(`SELECT producto_nombre, producto_precio 
+	FROM producto 
+	WHERE producto_codigo = ?`, barcode)
+	if qErr != nil {
+		return fmt.Errorf("addToSale Query: %v", qErr)
+	}
+	defer q.Close()
+	for q.Next() {
+		if err := q.Scan(&name, &price); err != nil {
+			return fmt.Errorf("addToSale Scan: %v", err)
+		}
+	}
+
+	r, rErr := DB.Exec(`INSERT INTO transaccion_salida_producto
+	(name, code, price, quantity, type) VALUES
+	(?, ?, ?, ?, ?)`, name, barcode, price, quantity, saletype)
+	if rErr != nil {
+		return fmt.Errorf("addToSale Insert: %v", rErr)
+	}
+	fmt.Println(r)
+	return nil
+}
+
+func GetSaleTransactionTable() ([]Producto_salida_join, error) {
+	var table []Producto_salida_join
+	rows, err := DB.Query(`select 
+	name, code, price, quantity, s.salida_tipo_nombre
+	from transaccion_salida_producto
+	JOIN salida_tipo s
+	on s.salida_tipo_id = type;`)
+	if err != nil {
+		return nil, fmt.Errorf("getSaleTransactionTable: %v", err)
+	}
+
+	defer rows.Close()
+	for rows.Next() {
+		var prod Producto_salida_join
+		if err := rows.Scan(&prod.Nombre, &prod.Codigo, &prod.PrecioVenta, &prod.Cantidad, &prod.TipoSalida); err != nil {
+			return nil, fmt.Errorf("getSaleTransactionTable Scan: %v", err)
+		}
+		prod.Fecha = time.Now().Format("yyyy-mm-dd")
+		fmt.Println(prod.Cantidad, prod.Codigo, prod.Nombre)
+		table = append(table, prod)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("AllSales: %v", err)
+	}
+
+	return table, nil
 }
