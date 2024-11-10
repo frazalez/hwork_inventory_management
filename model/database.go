@@ -158,8 +158,7 @@ if err := rows.Err(); err != nil {
 if subtle.ConstantTimeCompare([]byte(username), []byte(realData.Usuario)) == 1 &&
 subtle.ConstantTimeCompare([]byte(password), []byte(realData.Passwd)) == 1 {
 	
-	return false, fmt.Errorf("auth/invalidchars")
-	c.SetCookie(&http.Cookie{
+		c.SetCookie(&http.Cookie{
 			Name:     "usrtype",
 			Value:    realData.Privilegio, //admin, user, manager validos.
 			Path:     "/",
@@ -363,4 +362,8 @@ func GetSaleTransactionTable() ([]Producto_salida_join, error) {
 	}
 
 	return table, nil
+}
+
+func CompleteSale() error {
+	r, err := DB.Exec()
 }

@@ -20,18 +20,18 @@ templ CreateProduct() {
 }
 
 templ CreateSale() {
-    <button id="startSale" 
-        name="startSale"
-        hx-post="/start-sale" 
-        hx-target="#productsTableDiv"
-        hx-swap="innerHTML"
-        class="bg-slate-500 bg-opacity-20 border border-slate-700">
-        Iniciar venta
-    </button>
     <form id="createSale"
     hx-post="/create-sale"
     hx-target="#productsTableDiv"
     class="flex flex-col gap-4 align-middle justify-center mx-20">
+        <button id="startSale" 
+            name="startSale"
+            hx-post="/start-sale" 
+            hx-target="#productsTableDiv"
+            hx-swap="innerHTML"
+            class="bg-slate-500 bg-opacity-20 border border-slate-700">
+            Iniciar venta
+        </button>
         <p class="text-3xl font-bold">Hacer venta</p>
         <input required type="text" id="barcode" name="barcode"
             placeholder="Codigo de producto" 
@@ -46,6 +46,14 @@ templ CreateSale() {
             <option value="2">Merma</option>
         </select>
         <button type="submit">Agregar producto</button>
+        <button id="completeSale" 
+            name="completeSale"
+            hx-post="/complete-sale" 
+            hx-target="#productsTableDiv"
+            hx-swap="innerHTML"
+            class="bg-slate-500 bg-opacity-20 border border-slate-700">
+            Completar Venta
+        </button>
     </form>
     <p hx-trigger="duplicateError from:body" hx-get="/static/addUserDuplicate.html" id="errorDupe" class="text-red-600 text-center"></p>
     <p hx-trigger="invalidPrivilegeError from:body" hx-get="/static/addUserInvalid.html" id="errorInvalidPriv" class="text-red-600 text-center"></p>

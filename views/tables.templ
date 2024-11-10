@@ -213,3 +213,24 @@ templ SalesTableOnly(contents []model.Producto_salida_join) {
     }
     </table>
 }
+
+templ SalesTransacTable(contents []model.Producto_salida_join) {
+    <table id="productsTable" class="max-h-60 overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
+        <tr class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
+            <td class="border-slate-800 border p-2">Nombre</td>
+            <td class="border-slate-800 border p-2">Codigo</td>
+            <td class="border-slate-800 border p-2">Precio Venta</td>
+            <td class="border-slate-800 border p-2">Cantidad</td>
+            <td class="border-slate-800 border p-2">Tipo Salida</td>
+        </tr>
+    for i := range contents {
+        <tr class="border-collapse border-slate-800 border">
+            <td class="border-slate-800 border p-2">{contents[i].Nombre}</td>
+            <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Codigo, 10)}</td>
+            <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].PrecioVenta, 10)}</td>
+            <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Cantidad, 10)}</td>
+            <td class="border-slate-800 border p-2">{contents[i].TipoSalida}</td>
+        </tr>
+    }
+    </table>
+}

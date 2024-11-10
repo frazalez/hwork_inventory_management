@@ -26,4 +26,5 @@ func DefineRouting(e *echo.Echo) {
 	e.GET("/get-sales-table", TablesSalesHandler)
 	e.POST("/start-sale", StartSaleHandler)
 	e.POST("/create-sale", CreateSaleHandler)
+	e.POST("/complete-sale", CompleteSaleHandler)
 }

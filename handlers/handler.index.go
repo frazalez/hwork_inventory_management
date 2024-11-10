@@ -295,7 +295,7 @@ func SmallTableSearchHandler(c echo.Context) error {
 }
 
 //falta agregar sumatoria a la venta
-//falta agregar boton de confirmacion a venta}
+//falta agregar boton de confirmacion a venta
 //falta agregar mensaje que indica venta en proceso
 func CreateSaleHandler(c echo.Context) error {
 	barcode, bcErr := strconv.ParseInt(c.FormValue("barcode"), 10, 64)
@@ -332,10 +332,10 @@ func CreateSaleHandler(c echo.Context) error {
 		c.Response().Header().Add("HX-Trigger", "cancel")		
 		return c.NoContent(http.StatusBadRequest)
 	}
-	return views.SalesTableOnly(newTable).Render(getParams(c))
+	return views.SalesTransacTable(newTable).Render(getParams(c))
 }
 
-func TablesSalesHandler (c echo.Context) error {
+func TablesSalesHandler(c echo.Context) error {
 	usrCookie, usrCookieError := c.Cookie("usrtype")
 	loginCookie, loginCookieError := c.Cookie("login")
 
@@ -360,12 +360,22 @@ func TablesSalesHandler (c echo.Context) error {
 
 }
 
-func StartSaleHandler (c echo.Context) error {
+func StartSaleHandler(c echo.Context) error {
 	table := []model.Producto_salida_join{}
 	if err := model.StartSale(); err != nil {
 		fmt.Printf("StartSale DatabaseError: %v", err)
 		c.Response().Header().Add("HX-Trigger", "cancel")
 		return c.NoContent(http.StatusBadRequest)
 	}
-	return views.SalesTableOnly(table).Render(getParams(c))
+	return views.SalesTransacTable(table).Render(getParams(c))
 }
+
+func CompleteSaleHandler(c echo.Context) error {
+	if err := model.CompleteSale(); err != nil {
+		fmt.Printf("CompleteSale DatabaseError: %v", err)
+		c.Response().Header().Add("HX-Trigger", "cancel")
+		return c.NoContent(http.StatusBadRequest)
+	}
+	return VentasPutHandler(c)
+}
+
