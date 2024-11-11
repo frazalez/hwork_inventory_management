@@ -42,7 +42,7 @@ func navButton(text string, route string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-target=\"#contents\" hx-swap=\"innerHTML\" hx-trigger=\"click\" class=\"hover:text-xl hover:transition-all transition-all\r\n    hover:bg-blue-600 hover:bg-opacity-20 px-2 py-1\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-target=\"#contents\" hx-swap=\"innerHTML\" hx-trigger=\"click\" class=\"hover:text-xl hover:transition-all transition-all\n    hover:bg-blue-600 hover:bg-opacity-20 px-2 py-1\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -97,7 +97,7 @@ func getButton(text string, route string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-trigger=\"click\" class=\"hover:text-xl hover:transition-all transition-all\r\n    hover:bg-blue-600 hover:bg-opacity-20 px-2 py-1\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-trigger=\"click\" class=\"hover:text-xl hover:transition-all transition-all\n    hover:bg-blue-600 hover:bg-opacity-20 px-2 py-1\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

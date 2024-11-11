@@ -7,4 +7,4 @@ run:
 	go run src/main.go
 
 tailwind:
-	tailwindcss -i static/input.css -o static/tailwind.css -w
+	./tailwindcss-linux-x64 -i static/input.css -o static/tailwind.css -w

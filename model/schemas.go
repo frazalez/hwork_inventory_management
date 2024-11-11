@@ -89,7 +89,15 @@ type Producto struct {
 }
 
 type ProductSmall struct {
-	Producto_codigo      int64
-	Producto_nombre   string
-	Producto_precio   float64
+	Producto_codigo int64
+	Producto_nombre string
+	Producto_precio float64
+}
+
+type TransactionProduct struct {
+	Name     string
+	Code     int64
+	Price    int64
+	Quantity int64
+	Type     int64
 }

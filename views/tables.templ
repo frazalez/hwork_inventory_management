@@ -5,12 +5,14 @@ import "strconv"
 
 templ ProductsTableSmall(contents []model.ProductSmall) {
 <div class="max-h-[80vh] overflow-y-auto">
-    <table id="productsTable" class="max-h-60 overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
-        <tr class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
-            <td class="border-slate-800 border p-2">Nombre</td>
-            <td class="border-slate-800 border p-2">Codigo</td>
-            <td class="border-slate-800 border p-2">Precio</td>
-        </tr>
+    <table id="productsTable" class="sortable max-h-60 overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
+        <thead>
+            <tr class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
+                <th class="cursor-pointer border-slate-800 border p-2">Nombre</th>
+                <th class="cursor-pointer border-slate-800 border p-2">Codigo</th>
+                <th class="cursor-pointer border-slate-800 border p-2">Precio</th>
+            </tr>
+        </thead>
     for i := range contents {
         <tr class="border-collapse border-slate-800 border">
             <td class="border-slate-800 border p-2">{contents[i].Producto_nombre}</td>

@@ -18,7 +18,7 @@ var DB *sql.DB
 func ConnectToDatabase() *sql.DB {
 
 	cfg := mysql.Config{
-		User:   "root",
+		User:   "admin",
 		Passwd: "admin",
 		Net:    "tcp",
 		Addr:   "localhost",
@@ -68,15 +68,15 @@ func AllProducts(db *sql.DB) ([]Producto, error) {
 
 func AllSales(db *sql.DB) ([]Producto_salida_join, error) {
 	var producto []Producto_salida_join
-	rows, err := db.Query(`select 
-    p.producto_nombre, p.producto_codigo, 
-    ps.pro_sal_precio, ps.pro_sal_cantidad , 
+	rows, err := db.Query(`select
+    p.producto_nombre, p.producto_codigo,
+    ps.pro_sal_precio, ps.pro_sal_cantidad ,
     st.salida_tipo_nombre,  s.salida_fecha , u.usuario_nombre
-	from 
-    producto p 
-	join 
+	from
+    producto p
+	join
     producto_salida ps on p.producto_id = ps.pro_sal_producto
-	JOIN 
+	JOIN
     salida s on ps.pro_sal_salida = s.salida_id
 	JOIN
     salida_tipo st on s.salida_tipo = st.salida_tipo_id
@@ -136,28 +136,28 @@ func Authenticate(username, password string, c echo.Context) (bool, error) {
 
 	if strings.ContainsAny(username, "\"`'") || strings.ContainsAny(password, "\"`'") {
 	}
-	
+
 	rows := DB.QueryRow(`SELECT u.usuario_nombre, u.usuario_psswd, u.usuario_activo, p.privilegio_nombre FROM usuario u
 	JOIN privilegio p on p.privilegio_id = u.usuario_privilegio
 WHERE u.usuario_nombre = ?`, username)
 
-if err := rows.Scan(&realData.Usuario, &realData.Passwd, &realData.Activo, &realData.Privilegio); err != nil {
-	return false, fmt.Errorf("auth/scan: %v", err)
-}
+	if err := rows.Scan(&realData.Usuario, &realData.Passwd, &realData.Activo, &realData.Privilegio); err != nil {
+		return false, fmt.Errorf("auth/scan: %v", err)
+	}
 
-fmt.Printf("%v %v %v %v", realData.Usuario, realData.Passwd, realData.Activo, realData.Privilegio)
+	fmt.Printf("%v %v %v %v", realData.Usuario, realData.Passwd, realData.Activo, realData.Privilegio)
 
-if realData.Activo == 0 {
-	return false, fmt.Errorf("auth/disableduser")
-}
+	if realData.Activo == 0 {
+		return false, fmt.Errorf("auth/disableduser")
+	}
 
-if err := rows.Err(); err != nil {
-	return false, fmt.Errorf("auth/rowserr: %v", err)
-}
+	if err := rows.Err(); err != nil {
+		return false, fmt.Errorf("auth/rowserr: %v", err)
+	}
 
-if subtle.ConstantTimeCompare([]byte(username), []byte(realData.Usuario)) == 1 &&
-subtle.ConstantTimeCompare([]byte(password), []byte(realData.Passwd)) == 1 {
-	
+	if subtle.ConstantTimeCompare([]byte(username), []byte(realData.Usuario)) == 1 &&
+		subtle.ConstantTimeCompare([]byte(password), []byte(realData.Passwd)) == 1 {
+
 		c.SetCookie(&http.Cookie{
 			Name:     "usrtype",
 			Value:    realData.Privilegio, //admin, user, manager validos.
@@ -169,6 +169,14 @@ subtle.ConstantTimeCompare([]byte(password), []byte(realData.Passwd)) == 1 {
 		c.SetCookie(&http.Cookie{
 			Name:     "login",
 			Value:    "yes",
+			Path:     "/",
+			MaxAge:   0,
+			HttpOnly: true,
+		})
+
+		c.SetCookie(&http.Cookie{
+			Name:     "usrname",
+			Value:    realData.Usuario,
 			Path:     "/",
 			MaxAge:   0,
 			HttpOnly: true,
@@ -262,8 +270,8 @@ func ModifyProduct(ogName string, name string, code int64, margin float64, price
 	return nil
 }
 
-func GetSmallTable (code int64) ([]ProductSmall, error) {
-	codeStr := fmt.Sprintf("%s%v%s", "%",code,"%")
+func GetSmallTable(code int64) ([]ProductSmall, error) {
+	codeStr := fmt.Sprintf("%s%v%s", "%", code, "%")
 	fmt.Println(codeStr)
 	rows, err := DB.Query(`SELECT producto_codigo, producto_nombre, producto_precio FROM producto WHERE producto_codigo LIKE ?`, codeStr)
 	var products []ProductSmall
@@ -279,7 +287,7 @@ func GetSmallTable (code int64) ([]ProductSmall, error) {
 		fmt.Println(prod.Producto_codigo, prod.Producto_nombre, prod.Producto_precio)
 		products = append(products, prod)
 	}
-	
+
 	return products, nil
 }
 
@@ -295,7 +303,7 @@ func StartSale() error {
 			price int(10),
 			quantity int(10),
 			type int(1),
-			foreign key (type) references salida_tipo(salida_tipo_id)		
+			foreign key (type) references salida_tipo(salida_tipo_id)
 		);`)
 
 	if err != nil {
@@ -312,8 +320,8 @@ func StartSale() error {
 func AddToSale(barcode int64, quantity int64, saletype int64) error {
 	var name string
 	var price int64
-	q, qErr := DB.Query(`SELECT producto_nombre, producto_precio 
-	FROM producto 
+	q, qErr := DB.Query(`SELECT producto_nombre, producto_precio
+	FROM producto
 	WHERE producto_codigo = ?`, barcode)
 	if qErr != nil {
 		return fmt.Errorf("addToSale Query: %v", qErr)
@@ -337,7 +345,7 @@ func AddToSale(barcode int64, quantity int64, saletype int64) error {
 
 func GetSaleTransactionTable() ([]Producto_salida_join, error) {
 	var table []Producto_salida_join
-	rows, err := DB.Query(`select 
+	rows, err := DB.Query(`select
 	name, code, price, quantity, s.salida_tipo_nombre
 	from transaccion_salida_producto
 	JOIN salida_tipo s
@@ -364,6 +372,67 @@ func GetSaleTransactionTable() ([]Producto_salida_join, error) {
 	return table, nil
 }
 
-func CompleteSale() error {
-	r, err := DB.Exec()
+func CompleteSale(username string) error {
+	transacRows, trError := DB.Query(`SELECT tsp.name, tsp.code, tsp.price , tsp.quantity, tsp.type
+FROM transaccion_salida_producto tsp;`)
+
+	if trError != nil {
+		return fmt.Errorf("CompleteSale SelectTransactionErr: %v", trError)
+	}
+	var transacTable []TransactionProduct
+
+	defer transacRows.Close()
+	for transacRows.Next() {
+		var transacRowValues TransactionProduct
+		if err := transacRows.Scan(&transacRowValues.Name, &transacRowValues.Code, &transacRowValues.Price, &transacRowValues.Quantity, &transacRowValues.Type); err != nil {
+			return fmt.Errorf("CompleteSale transacRowsScan %v", err)
+		}
+		transacTable = append(transacTable, transacRowValues)
+	}
+
+	user, uError := getIDFromUsername(username)
+	if uError != nil {
+		return fmt.Errorf("CompleteSale GetIDFromUsername: %v", uError)
+	}
+
+	log.Print(transacTable[0].Type)
+
+	insertSaleRows, isErr := DB.Exec(`INSERT INTO salida (salida_fecha, salida_tipo, salida_usuario)
+		VALUES (?, ?, ?)`, time.Now().Format(time.DateTime), transacTable[0].Type, user)
+	if isErr != nil {
+		return fmt.Errorf("CompleteSale insertSalida", isErr)
+	}
+	log.Printf("inserted rows: %v", insertSaleRows)
+
+	lastInsertRow := DB.QueryRow(`SELECT LAST_INSERT_ID() FROM salida`)
+	var lastInsertID int
+
+	if err := lastInsertRow.Scan(&lastInsertID); err != nil {
+		return fmt.Errorf(`CompleteTable findLastInsertID`, err)
+	}
+
+	for i := range transacTable {
+		PIDrow := DB.QueryRow(`SELECT producto_id FROM producto WHERE producto_codigo = ?`, transacTable[i].Code)
+		var PID int
+		if err := PIDrow.Scan(&PID); err != nil {
+			return fmt.Errorf("CompleteSale InsertTransaction FindPID: %v", err)
+		}
+		rows, err := DB.Exec(`INSERT INTO producto_salida (pro_sal_salida, pro_sal_producto, pro_sal_cantidad, pro_sal_precio)
+				VALUES (?,?,?,?)`, lastInsertID, PID, transacTable[i].Quantity, transacTable[i].Price)
+		if err != nil {
+			return fmt.Errorf("CompleteSale InsertTransaction InsertIntoProductoSalida: %v", err)
+		}
+		log.Printf("rows affected: %v", rows)
+	}
+
+	return nil
+}
+
+func getIDFromUsername(username string) (int, error) {
+	response := DB.QueryRow("SELECT usuario_id FROM usuario WHERE usuario_nombre = ?", username)
+	var id int
+	if err := response.Scan(&id); err != nil {
+		return -1, fmt.Errorf("getIDFromUsername: %v", err)
+	}
+	return id, nil
 }

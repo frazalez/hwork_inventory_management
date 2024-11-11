@@ -630,6 +630,10 @@ video {
   border-collapse: collapse;
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
 .flex-row {
   flex-direction: row;
 }

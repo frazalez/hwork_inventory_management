@@ -294,42 +294,42 @@ func SmallTableSearchHandler(c echo.Context) error {
 	return views.ProductsTableSmall(data).Render(getParams(c))
 }
 
-//falta agregar sumatoria a la venta
-//falta agregar boton de confirmacion a venta
-//falta agregar mensaje que indica venta en proceso
+// falta agregar sumatoria a la venta
+// falta agregar boton de confirmacion a venta
+// falta agregar mensaje que indica venta en proceso
 func CreateSaleHandler(c echo.Context) error {
 	barcode, bcErr := strconv.ParseInt(c.FormValue("barcode"), 10, 64)
 	if bcErr != nil {
 		fmt.Printf("CreateSale ParseIntCode: %v", bcErr)
-		c.Response().Header().Add("HX-Trigger", "cancel")		
+		c.Response().Header().Add("HX-Trigger", "cancel")
 		return c.NoContent(http.StatusBadRequest)
 	}
 
 	quantity, qErr := strconv.ParseInt(c.FormValue("quantity"), 10, 64)
 	if qErr != nil {
 		fmt.Printf("CreateSale ParseIntQuantity: %v", qErr)
-		c.Response().Header().Add("HX-Trigger", "cancel")		
+		c.Response().Header().Add("HX-Trigger", "cancel")
 		return c.NoContent(http.StatusBadRequest)
 	}
 
-	saleType, sErr:= strconv.ParseInt(c.FormValue("type"), 10, 64)
+	saleType, sErr := strconv.ParseInt(c.FormValue("type"), 10, 64)
 	if sErr != nil {
 		fmt.Printf("CreateSale ParseIntType: %v", qErr)
-		c.Response().Header().Add("HX-Trigger", "cancel")		
+		c.Response().Header().Add("HX-Trigger", "cancel")
 		return c.NoContent(http.StatusBadRequest)
 	}
 
 	err := model.AddToSale(barcode, quantity, saleType)
 	if err != nil {
 		fmt.Printf("CreateSale DatabaseError: %v", err)
-		c.Response().Header().Add("HX-Trigger", "cancel")		
+		c.Response().Header().Add("HX-Trigger", "cancel")
 		return c.NoContent(http.StatusBadRequest)
 	}
 
 	newTable, ntErr := model.GetSaleTransactionTable()
 	if ntErr != nil {
 		fmt.Printf("GetSaleTransactionTable DatabaseError: %v", ntErr)
-		c.Response().Header().Add("HX-Trigger", "cancel")		
+		c.Response().Header().Add("HX-Trigger", "cancel")
 		return c.NoContent(http.StatusBadRequest)
 	}
 	return views.SalesTransacTable(newTable).Render(getParams(c))
@@ -371,11 +371,24 @@ func StartSaleHandler(c echo.Context) error {
 }
 
 func CompleteSaleHandler(c echo.Context) error {
-	if err := model.CompleteSale(); err != nil {
+	usrcookie, cookieErr := c.Cookie("usrname")
+	if cookieErr != nil {
+		fmt.Printf("CompleteSale CookieError: %v", cookieErr)
+		c.Response().Header().Add("HX-Trigger", "cancel")
+		return c.NoContent(http.StatusBadRequest)
+	}
+	username := usrcookie.Value
+	if err := model.CompleteSale(username); err != nil {
 		fmt.Printf("CompleteSale DatabaseError: %v", err)
 		c.Response().Header().Add("HX-Trigger", "cancel")
 		return c.NoContent(http.StatusBadRequest)
 	}
-	return VentasPutHandler(c)
-}
 
+	allSales, err := model.AllSales(model.DB)
+	if err != nil {
+		fmt.Printf("CompleteSale GetAllSales: %v", err)
+		c.Response().Header().Add("HX-Trigger", "cancel")
+		return c.NoContent(http.StatusBadRequest)
+	}
+	return views.SalesTableOnly(allSales).Render(getParams(c))
+}
