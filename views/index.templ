@@ -2,24 +2,27 @@ package views
 
 
 templ Index(usertype string) {
-    <!DOCTYPE html>
-    <head>
+<!DOCTYPE html>
+
+<head>
     <script src="/static/htmx.min.js"></script>
-    <script src="/static/sorttable.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"/>
+    <script src="/static/sortTable.js"/>
     <link rel="stylesheet" type="text/css" href="/static/tailwind.css">
     <title>Administracion</title>
-    </head>
-    <body id="fullPage" class="bg-slate-600 font-sans text-slate-200 text-lg">
-        switch usertype {
-            case "admin":
-                @NavbarAdmin()
-            case "manager":
-                @NavbarManager()
-            case "user":
-                @NavbarUser()
-        }
-        <div id="contents" class="mx-12 transition-all flex flex-row gap-4">
-        </div>
+</head>
 
-    </body>
+<body id="fullPage" class="bg-slate-600 font-sans text-slate-200 text-lg">
+    switch usertype {
+    case "admin":
+    @NavbarAdmin()
+    case "manager":
+    @NavbarManager()
+    case "user":
+    @NavbarUser()
+    }
+    <div id="contents" class="mx-12 transition-all flex flex-row gap-4 justify-between">
+    </div>
+
+</body>
 }

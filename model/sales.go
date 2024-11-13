@@ -123,10 +123,10 @@ func AddToSale(barcode int64, quantity int64, saletype int64) error {
 	return nil
 }
 
-func GetSaleTransactionTable() ([]Producto_salida_join, error) {
-	var table []Producto_salida_join
+func GetSaleTransactionTable() ([]TransactionProduct, error) {
+	var table []TransactionProduct
 	rows, err := DB.Query(`select
-	name, code, price, quantity, s.salida_tipo_nombre
+	name, code, price, quantity, type
 	from transaccion_salida_producto
 	JOIN salida_tipo s
 	on s.salida_tipo_id = type;`)
@@ -136,12 +136,10 @@ func GetSaleTransactionTable() ([]Producto_salida_join, error) {
 
 	defer rows.Close()
 	for rows.Next() {
-		var prod Producto_salida_join
-		if err := rows.Scan(&prod.Nombre, &prod.Codigo, &prod.PrecioVenta, &prod.Cantidad, &prod.TipoSalida); err != nil {
+		var prod TransactionProduct
+		if err := rows.Scan(&prod.Name, &prod.Code, &prod.Price, &prod.Quantity, &prod.Type); err != nil {
 			return nil, fmt.Errorf("getSaleTransactionTable Scan: %v", err)
 		}
-		prod.Fecha = time.Now().Format("yyyy-mm-dd")
-		fmt.Println(prod.Cantidad, prod.Codigo, prod.Nombre)
 		table = append(table, prod)
 	}
 
@@ -180,7 +178,7 @@ FROM transaccion_salida_producto tsp;`)
 	insertSaleRows, isErr := DB.Exec(`INSERT INTO salida (salida_fecha, salida_tipo, salida_usuario)
 		VALUES (?, ?, ?)`, time.Now().Format(time.DateTime), transacTable[0].Type, user)
 	if isErr != nil {
-		return fmt.Errorf("CompleteSale insertSalida", isErr)
+		return fmt.Errorf("CompleteSale insertSalida %v", isErr)
 	}
 	log.Printf("inserted rows: %v", insertSaleRows)
 

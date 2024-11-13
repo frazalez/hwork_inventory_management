@@ -2,29 +2,26 @@ package views
 
 
 templ Login() {
-    <!DOCTYPE html>
-    <head>
+<!DOCTYPE html>
+
+<head>
     <script src="/static/htmx.min.js"></script>
     <link rel="stylesheet" type="text/css" href="/static/tailwind.css">
     <title>Administracion</title>
-    </head>
+</head>
 
-    <body id="fullPage" class="bg-slate-600 font-sans text-slate-200 text-lg m-20">
-        <div id="loginScreen" class="justify-center align-middle">
-            <form id="loginForm" 
-                hx-post="/create-session" 
-                class="flex flex-col gap-4 mx-10 my-16">
-                <p class="text-3xl justify-center text-center">Login</p>
-                <input type="text" name="username" placeholder="Username">
-                <input type="password" name="password" placeholder="Password">
-                <button type="submit">Login</button>
+<body id="fullPage" class="bg-slate-600 font-sans text-slate-200 text-lg m-20">
+    <div id="loginScreen" class="justify-center align-middle">
+        <form id="loginForm" hx-post="/create-session" class="flex flex-col gap-4 mx-10 my-16 align-middle">
+            <p class="text-3xl justify-center text-center">Login</p>
+            <input type="text" name="username" placeholder="Username" class="text-slate-600">
+            <input type="password" name="password" placeholder="Password" class="text-slate-600">
+            <button type="submit" class="size-5">Login</button>
 
-            <p id="error" class="text-red-600 justify-center align-middle text-center" 
-            hx-get="/static/login-error.html"
-            hx-trigger="loginFailed from:body"
-            hx-swap="innerHTML">
+            <p id="error" class="text-red-600 justify-center align-middle text-center" hx-get="/static/login-error.html"
+                hx-trigger="loginFailed from:body" hx-swap="innerHTML">
             </p>
-            </form>
-        </div>
-    </body>
+        </form>
+    </div>
+</body>
 }

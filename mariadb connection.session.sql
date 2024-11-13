@@ -12,7 +12,7 @@ insert into privilegio (privilegio_nombre) values ('admin'), ('manager'), ('user
 
 create table if not exists usuario (
     usuario_id int(10) primary key auto_increment,
-    usuario_nombre varchar(20),
+    usuario_nombre varchar(20) unique,
     usuario_psswd varchar(20),
     usuario_privilegio int(1),
     usuario_activo boolean,
@@ -26,7 +26,7 @@ VALUES ('admin', 'admin', 1, true), ('manager', 'manager', 2, true), ('user', 'u
 create table if not exists producto (
     producto_id int(10) primary key auto_increment,
     producto_nombre varchar(20),
-    producto_codigo int(10),
+    producto_codigo int(10) unique,
     producto_margen decimal(10,2),
     producto_precio int(10),
     producto_activado boolean
@@ -34,7 +34,7 @@ create table if not exists producto (
 
 CREATE table if not exists distribuidor (
   distribuidor_id int(10) primary key auto_increment,
-  distribuidor_nombre varchar(20)  
+  distribuidor_nombre varchar(20)
 );
 
 create table if not exists entrada (

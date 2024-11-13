@@ -1,0 +1,99 @@
+package views
+
+import "inventoryManagement/model"
+import "strconv"
+
+templ SellTable(contents []model.Producto_salida_join) {
+<div x-data="data()" class="max-h-80 overflow-y-auto">
+    <div id="productsTableDiv" name="productsTable">
+        @SalesTableOnly(contents)
+    </div>
+    <button id="viewSales" name="viewSales" hx-get="/get-sales-table" hx-target="#productsTableDiv" hx-swap="innerHTML"
+        class="bg-slate-500 bg-opacity-20 border border-slate-700 p-2">
+        Ver ventas
+    </button>
+</div>
+<div id="productSearchSmall"></div>
+<div id="makeSaleDiv">@CreateSale()</div>
+}
+
+templ SalesTableOnly(contents []model.Producto_salida_join) {
+<table id="productsTable"
+    class="max-h-60 overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
+    <thead class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
+        <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Nombre</th>
+        <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Codigo</th>
+        <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Precio Venta</th>
+        <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Cantidad</th>
+        <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Tipo Salida</th>
+        <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Fecha</th>
+        <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Usuario Salida</th>
+    </thead>
+    <tbody x-ref="tbody">
+        for i := range contents {
+        <tr class="border-collapse border-slate-800 border">
+            <td class="border-slate-800 border p-2">{contents[i].Nombre}</td>
+            <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Codigo, 10)}</td>
+            <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].PrecioVenta, 10)}</td>
+            <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Cantidad, 10)}</td>
+            <td class="border-slate-800 border p-2">{contents[i].TipoSalida}</td>
+            <td class="border-slate-800 border p-2">{contents[i].Fecha}</td>
+            <td class="border-slate-800 border p-2">{contents[i].UsuarioSalida}</td>
+        </tr>
+        }
+    </tbody>
+</table>
+}
+
+templ SalesTransacTable(contents []model.TransactionProduct) {
+<table id="productsTable"
+    class="max-h-60 overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
+    <thead class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
+        <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Nombre</th>
+        <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Codigo</th>
+        <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Precio Venta</th>
+        <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Cantidad</th>
+    </thead>
+    <tbody x-ref="tbody">
+        for i := range contents {
+        <tr class="border-collapse border-slate-800 border">
+            <td class="border-slate-800 border p-2">{contents[i].Name}</td>
+            <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Code, 10)}</td>
+            <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Price, 10)}</td>
+            <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Quantity, 10)}</td>
+        </tr>
+        }
+    </tbody>
+</table>
+}
+
+templ CreateSale() {
+<form id="createSale" hx-post="/create-sale" hx-target="#productsTableDiv"
+    class="flex flex-col gap-4 align-middle justify-center mx-20">
+    <button id="startSale" name="startSale" hx-post="/start-sale" hx-target="#productsTableDiv" hx-swap="innerHTML"
+        class="bg-slate-500 bg-opacity-20 border border-slate-700">
+        Iniciar venta
+    </button>
+    <p class="text-3xl font-bold">Hacer venta</p>
+    <input required type="text" id="barcode" name="barcode" placeholder="Codigo de producto"
+        hx-post="/small-table-search" hx-trigger="input changed delay:500ms" hx-target="#productSearchSmall"
+        hx-indicator=".htmx-indicator" class="bg-slate-500 border-slate-700 p-1">
+    <input required type="text" default="1" name="quantity" id="quantity" placeholder="Cantidad"
+        class="bg-slate-500 border-slate-700 p-1">
+    <select required default="venta" name="type" id="type" class="bg-slate-500 border-slate-700 p-1">
+        <option value="1">Venta</option>
+        <option value="2">Merma</option>
+    </select>
+    <button type="submit">Agregar producto</button>
+    <button id="completeSale" name="completeSale" hx-post="/complete-sale" hx-target="#productsTableDiv"
+        hx-swap="innerHTML" class="bg-slate-500 bg-opacity-20 border border-slate-700">
+        Completar Venta
+    </button>
+</form>
+<p hx-trigger="duplicateError from:body" hx-get="/static/addUserDuplicate.html" id="errorDupe"
+    class="text-red-600 text-center"></p>
+<p hx-trigger="invalidPrivilegeError from:body" hx-get="/static/addUserInvalid.html" id="errorInvalidPriv"
+    class="text-red-600 text-center"></p>
+<p hx-trigger="insertError from:body" hx-get="/static/addUserInsert.html" id="errorUserInsert"
+    class="text-red-600 text-center"></p>
+}

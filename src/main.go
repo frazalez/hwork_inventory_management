@@ -19,5 +19,5 @@ func main() {
 	handlers.DefineRouting(echoInstance)
 	model.DB = model.ConnectToDatabase()
 
-	echoInstance.Logger.Fatal(echoInstance.Start(":8080"))
+	echoInstance.Logger.Fatal(echoInstance.Start(":8000"))
 }
