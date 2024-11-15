@@ -86,6 +86,7 @@ func CreateSaleHandler(c echo.Context) error {
 		c.Response().Header().Add("HX-Trigger", "cancel")
 		return c.NoContent(http.StatusBadRequest)
 	}
+	c.Response().Header().Add("HX-Trigger", "saleTotal")
 	return views.SalesTransacTable(newTable).Render(getParams(c))
 }
 
@@ -145,4 +146,15 @@ func CompleteSaleHandler(c echo.Context) error {
 		return c.NoContent(http.StatusBadRequest)
 	}
 	return views.SalesTableOnly(allSales).Render(getParams(c))
+}
+
+func calculateTotalSaleHandler(c echo.Context) error {
+	total, err := model.CalculateTotalSale()
+	if err != nil {
+		fmt.Printf("calculateTotalSaleHandler: %v", err)
+		c.Response().Header().Add("HX-Trigger", "cancel")
+		return c.NoContent(http.StatusBadRequest)
+	}
+	totalString := fmt.Sprintf("Total: %v", strconv.FormatInt(int64(total), 10))
+	return c.String(http.StatusOK, totalString)
 }

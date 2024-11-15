@@ -4,74 +4,79 @@ import "inventoryManagement/model"
 import "strconv"
 
 templ ProductsTable(contents []model.Producto) {
-<div x-data="data()"class="max-h-80 overflow-y-auto">
+<div x-data="data()" class="max-h-80 overflow-y-auto">
     <table id="productsTable"
         class="min-w-full table-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
         <thead class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
-        <tr>
-            <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">ID</th>
-            <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Nombre</th>
-            <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Codigo</th>
-            <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Margen</th>
-            <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Precio</th>
-            <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Activo</th>
+            <tr>
+                <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">ID</th>
+                <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Nombre</th>
+                <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Codigo</th>
+                <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Margen</th>
+                <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Precio</th>
+                <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Activo</th>
             </tr>
         </thead>
         <tbody x-ref="tbody">
-        for i := range contents {
-        <tr class="border-collapse border-slate-800 border">
-            <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Producto_id, 10)}</td>
-            <td class="border-slate-800 border p-2">{contents[i].Producto_nombre}</td>
-            <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Producto_codigo, 10)}</td>
-            <td class="border-slate-800 border p-2">{strconv.FormatFloat(contents[i].Producto_margen, 'f', 5, 64)}</td>
-            <td class="border-slate-800 border p-2">{strconv.FormatFloat(contents[i].Producto_precio, 'f', 5, 64)}</td>
-            <td class="border-slate-800 border p-2">{strconv.FormatBool(contents[i].Producto_activado)}</td>
-        </tr>
-        }
+            for i := range contents {
+            <tr class="border-collapse border-slate-800 border">
+                <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Producto_id, 10)}</td>
+                <td class="border-slate-800 border p-2">{contents[i].Producto_nombre}</td>
+                <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Producto_codigo, 10)}</td>
+                <td class="border-slate-800 border p-2">{strconv.FormatFloat(contents[i].Producto_margen, 'f', 5, 64)}
+                </td>
+                <td class="border-slate-800 border p-2">{strconv.FormatFloat(contents[i].Producto_precio, 'f', 5, 64)}
+                </td>
+                <td class="border-slate-800 border p-2">{strconv.FormatBool(contents[i].Producto_activado)}</td>
+            </tr>
+            }
         </tbody>
     </table>
 </div>
 }
 
 templ ProductsTableManager(contents []model.Producto) {
-<div x-data="data()"class="max-h-80 overflow-y-auto">
+<div x-data="data()" class="max-h-80 overflow-y-auto">
     <table id="productsTable"
         class="max-h-60 overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
         <thead class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
-        <tr>
-            <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">ID</th>
-            <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Nombre</th>
-            <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Codigo</th>
-            <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Margen</th>
-            <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Precio</th>
-            <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Activo</th>
-        </tr>
+            <tr>
+                <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">ID</th>
+                <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Nombre</th>
+                <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Codigo</th>
+                <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Margen</th>
+                <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Precio</th>
+                <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Activo</th>
+            </tr>
         </thead>
         <tbody x-ref="tbody">
-        for i := range contents {
-        <tr class="border-collapse border-slate-800 border">
-            <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Producto_id, 10)}</td>
-            <td class="border-slate-800 border p-2">{contents[i].Producto_nombre}</td>
-            <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Producto_codigo, 10)}</td>
-            <td class="border-slate-800 border p-2">{strconv.FormatFloat(contents[i].Producto_margen, 'f', 5, 64)}</td>
-            <td class="border-slate-800 border p-2">{strconv.FormatFloat(contents[i].Producto_precio, 'f', 5, 64)}</td>
-            <td class="border-slate-800 border p-2">{strconv.FormatBool(contents[i].Producto_activado)}</td>
+            for i := range contents {
+            <tr class="border-collapse border-slate-800 border">
+                <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Producto_id, 10)}</td>
+                <td class="border-slate-800 border p-2">{contents[i].Producto_nombre}</td>
+                <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Producto_codigo, 10)}</td>
+                <td class="border-slate-800 border p-2">{strconv.FormatFloat(contents[i].Producto_margen, 'f', 5, 64)}
+                </td>
+                <td class="border-slate-800 border p-2">{strconv.FormatFloat(contents[i].Producto_precio, 'f', 5, 64)}
+                </td>
+                <td class="border-slate-800 border p-2">{strconv.FormatBool(contents[i].Producto_activado)}</td>
 
-            <td class="border-slate-800 border p-2">
-                <form hx-put="/disableProduct" hx-swap="none">
-                    <input type="hidden" name="productId" value={strconv.FormatInt(contents[i].Producto_id, 10)} />
-                    <button class="p-2 border border-slate-800 bg-slate-500" type="submit">Desactivar producto</button>
-                </form>
-            </td>
+                <td class="border-slate-800 border p-2">
+                    <form hx-put="/disableProduct" hx-swap="none">
+                        <input type="hidden" name="productId" value={strconv.FormatInt(contents[i].Producto_id, 10)} />
+                        <button class="p-2 border border-slate-800 bg-slate-500" type="submit">Desactivar
+                            producto</button>
+                    </form>
+                </td>
 
-            <td class="border-slate-800 border p-2">
-                <form hx-put="/enableProduct" hx-swap="none">
-                    <input type="hidden" name="productId" value={strconv.FormatInt(contents[i].Producto_id, 10)} />
-                    <button class="p-2 border border-slate-800 bg-slate-500" type="submit">Activar producto</button>
-                </form>
-            </td>
-        </tr>
-        }
+                <td class="border-slate-800 border p-2">
+                    <form hx-put="/enableProduct" hx-swap="none">
+                        <input type="hidden" name="productId" value={strconv.FormatInt(contents[i].Producto_id, 10)} />
+                        <button class="p-2 border border-slate-800 bg-slate-500" type="submit">Activar producto</button>
+                    </form>
+                </td>
+            </tr>
+            }
         </tbody>
     </table>
 </div>
@@ -83,58 +88,62 @@ templ ProductsTableManager(contents []model.Producto) {
 templ ProductsTableAdmin(contents []model.Producto) {
 <div x-data="data()" class="max-h-80 overflow-y-auto">
     <table id="productsTable"
-        class="max-h-60 overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
+        class="max-h-96 overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
         <thead class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
-        <tr>
-            <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">ID</th>
-            <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Nombre</th>
-            <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Codigo</th>
-            <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Margen</th>
-            <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Precio</th>
-            <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Activo</th>
-            <th class="border-slate-800 border p-2">Desactivar Producto</th>
-            <th class="border-slate-800 border p-2">Activar Producto</th>
-            <th class="border-slate-800 border p-2">Modificar Producto</th>
+            <tr>
+                <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">ID</th>
+                <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Nombre</th>
+                <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Codigo</th>
+                <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Margen</th>
+                <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Precio</th>
+                <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Activo</th>
+                <th class="border-slate-800 border p-2">Desactivar Producto</th>
+                <th class="border-slate-800 border p-2">Activar Producto</th>
+                <th class="border-slate-800 border p-2">Modificar Producto</th>
             </tr>
         </thead>
         <tbody x-ref="tbody">
-        for i := range contents {
-        <tr class="border-collapse border-slate-800 border">
-            <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Producto_id, 10)}</td>
-            <td class="border-slate-800 border p-2">{contents[i].Producto_nombre}</td>
-            <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Producto_codigo, 10)}</td>
-            <td class="border-slate-800 border p-2">{strconv.FormatFloat(contents[i].Producto_margen, 'f', 5, 64)}</td>
-            <td class="border-slate-800 border p-2">{strconv.FormatFloat(contents[i].Producto_precio, 'f', 5, 64)}</td>
-            <td class="border-slate-800 border p-2">{strconv.FormatBool(contents[i].Producto_activado)}</td>
+            for i := range contents {
+            <tr class="border-collapse border-slate-800 border">
+                <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Producto_id, 10)}</td>
+                <td class="border-slate-800 border p-2">{contents[i].Producto_nombre}</td>
+                <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Producto_codigo, 10)}</td>
+                <td class="border-slate-800 border p-2">{strconv.FormatFloat(contents[i].Producto_margen, 'f', 5, 64)}
+                </td>
+                <td class="border-slate-800 border p-2">{strconv.FormatFloat(contents[i].Producto_precio, 'f', 5, 64)}
+                </td>
+                <td class="border-slate-800 border p-2">{strconv.FormatBool(contents[i].Producto_activado)}</td>
 
-            <td class="border-slate-800 border p-2">
-                <form hx-put="/disableProduct" hx-swap="none">
-                    <input type="hidden" name="productId" value={strconv.FormatInt(contents[i].Producto_id, 10)} />
-                    <button class="p-2 border border-slate-800 bg-slate-500" type="submit">Desactivar producto</button>
-                </form>
-            </td>
+                <td class="border-slate-800 border p-2">
+                    <form hx-put="/disableProduct" hx-swap="none">
+                        <input type="hidden" name="productId" value={strconv.FormatInt(contents[i].Producto_id, 10)} />
+                        <button class="p-2 border border-slate-800 bg-slate-500" type="submit">Desactivar
+                            producto</button>
+                    </form>
+                </td>
 
-            <td class="border-slate-800 border p-2">
-                <form hx-put="/enableProduct" hx-swap="none">
-                    <input type="hidden" name="productId" value={strconv.FormatInt(contents[i].Producto_id, 10)} />
-                    <button class="p-2 border border-slate-800 bg-slate-500" type="submit">Activar producto</button>
-                </form>
-            </td>
+                <td class="border-slate-800 border p-2">
+                    <form hx-put="/enableProduct" hx-swap="none">
+                        <input type="hidden" name="productId" value={strconv.FormatInt(contents[i].Producto_id, 10)} />
+                        <button class="p-2 border border-slate-800 bg-slate-500" type="submit">Activar producto</button>
+                    </form>
+                </td>
 
-            <td class="border-slate-800 border p-2">
-                <form hx-put="/modifyProductForm" hx-target="#modifyFormDiv">
-                    <input type="hidden" name="name" value={contents[i].Producto_nombre} />
-                    <input type="hidden" name="code" value={strconv.FormatInt(contents[i].Producto_codigo, 10)} />
-                    <input type="hidden" name="margin" value={strconv.FormatFloat(contents[i].Producto_margen, 'f' , 5,
-                        64)} />
-                    <input type="hidden" name="price" value={strconv.FormatFloat(contents[i].Producto_precio, 'f' , 5,
-                        64)} />
-                    <button class="p-2 border border-slate-800 bg-slate-500" type="submit">Modificar producto</button>
-                </form>
-            </td>
+                <td class="border-slate-800 border p-2">
+                    <form hx-put="/modifyProductForm" hx-target="#modifyFormDiv">
+                        <input type="hidden" name="name" value={contents[i].Producto_nombre} />
+                        <input type="hidden" name="code" value={strconv.FormatInt(contents[i].Producto_codigo, 10)} />
+                        <input type="hidden" name="margin" value={strconv.FormatFloat(contents[i].Producto_margen, 'f' ,
+                            5, 64)} />
+                        <input type="hidden" name="price" value={strconv.FormatFloat(contents[i].Producto_precio, 'f' ,
+                            5, 64)} />
+                        <button class="p-2 border border-slate-800 bg-slate-500" type="submit">Modificar
+                            producto</button>
+                    </form>
+                </td>
 
-        </tr>
-        }
+            </tr>
+            }
         </tbody>
 
     </table>

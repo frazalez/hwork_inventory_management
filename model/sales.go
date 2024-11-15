@@ -205,3 +205,15 @@ FROM transaccion_salida_producto tsp;`)
 
 	return nil
 }
+
+func CalculateTotalSale() (int, error) {
+	row := DB.QueryRow(`select SUM(sq.p*sq.q)
+	from (SELECT price as p, quantity as q from transaccion_salida_producto tsp) sq
+	;`)
+
+	var total int
+	if err := row.Scan(&total); err != nil {
+		return -1, fmt.Errorf("calculateTotalSale: %v", err)
+	}
+	return total, nil
+}

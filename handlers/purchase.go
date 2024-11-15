@@ -66,14 +66,7 @@ func CreatePurchaseHandler(c echo.Context) error {
 		return c.NoContent(http.StatusBadRequest)
 	}
 
-	PurchaseType, sErr := strconv.ParseInt(c.FormValue("type"), 10, 64)
-	if sErr != nil {
-		fmt.Printf("CreatePurchase ParseIntType: %v", qErr)
-		c.Response().Header().Add("HX-Trigger", "cancel")
-		return c.NoContent(http.StatusBadRequest)
-	}
-
-	err := model.AddToPurchase(barcode, quantity, PurchaseType)
+	err := model.AddToPurchase(barcode, quantity)
 	if err != nil {
 		fmt.Printf("CreatePurchase DatabaseError: %v", err)
 		c.Response().Header().Add("HX-Trigger", "cancel")
@@ -86,6 +79,7 @@ func CreatePurchaseHandler(c echo.Context) error {
 		c.Response().Header().Add("HX-Trigger", "cancel")
 		return c.NoContent(http.StatusBadRequest)
 	}
+	c.Response().Header().Add("HX-Trigger", "purchaseTotal")
 	return views.PurchasesTransacTable(newTable).Render(getParams(c))
 }
 
@@ -145,4 +139,15 @@ func CompletePurchaseHandler(c echo.Context) error {
 		return c.NoContent(http.StatusBadRequest)
 	}
 	return views.PurchasesTableOnly(allPurchases).Render(getParams(c))
+}
+
+func calculateTotalPurchaseHandler(c echo.Context) error {
+	total, err := model.CalculateTotalPurchase()
+	if err != nil {
+		fmt.Printf("calculateTotalPurchaseHandler: %v", err)
+		c.Response().Header().Add("HX-Trigger", "cancel")
+		return c.NoContent(http.StatusBadRequest)
+	}
+	totalString := fmt.Sprintf("Total: %v", strconv.FormatInt(int64(total), 10))
+	return c.String(http.StatusOK, totalString)
 }

@@ -6,22 +6,25 @@ templ Index(usertype string) {
 
 <head>
     <script src="/static/htmx.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"/>
-    <script src="/static/sortTable.js"/>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" />
+    <script src="/static/sortTable.js" />
     <link rel="stylesheet" type="text/css" href="/static/tailwind.css">
     <title>Administracion</title>
 </head>
 
-<body id="fullPage" class="bg-slate-600 font-sans text-slate-200 text-lg">
-    switch usertype {
-    case "admin":
-    @NavbarAdmin()
-    case "manager":
-    @NavbarManager()
-    case "user":
-    @NavbarUser()
-    }
-    <div id="contents" class="mx-12 transition-all flex flex-row gap-4 justify-between">
+<body id="fullPage"
+    class="w-dvw h-dvh max-h-dvh max-w-dvh overflow-clip justify-center bg-slate-600 font-sans text-slate-200 text-lg">
+    <div class="h-20 w-dvw">
+        switch usertype {
+        case "admin":
+        @NavbarAdmin()
+        case "manager":
+        @NavbarManager()
+        case "user":
+        @NavbarUser()
+        }
+    </div>
+    <div id="contents" class="h-5/6 w-dvw mx-12 transition-all flex flex-row gap-4 justify-between">
     </div>
 
 </body>

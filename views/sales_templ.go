@@ -32,7 +32,7 @@ func SellTable(contents []model.Producto_salida_join) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div x-data=\"data()\" class=\"max-h-80 overflow-y-auto\"><div id=\"productsTableDiv\" name=\"productsTable\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div x-data=\"data()\" class=\"max-h-full overflow-y-scroll \"><div id=\"productsTableDiv\" name=\"productsTable\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -40,7 +40,7 @@ func SellTable(contents []model.Producto_salida_join) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><button id=\"viewSales\" name=\"viewSales\" hx-get=\"/get-sales-table\" hx-target=\"#productsTableDiv\" hx-swap=\"innerHTML\" class=\"bg-slate-500 bg-opacity-20 border border-slate-700 p-2\">Ver ventas</button></div><div id=\"productSearchSmall\"></div><div id=\"makeSaleDiv\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><button id=\"viewSales\" name=\"viewSales\" hx-get=\"/get-sales-table\" hx-target=\"#productsTableDiv\" hx-swap=\"innerHTML\" class=\"h-max w-max justify-self-start self-start bg-slate-500 bg-opacity-20 border border-slate-700 p-2\">Ver ventas</button><div id=\"productSearchSmall\"></div><div id=\"makeSaleDiv\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -77,7 +77,7 @@ func SalesTableOnly(contents []model.Producto_salida_join) templ.Component {
 			templ_7745c5c3_Var2 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<table id=\"productsTable\" class=\"max-h-60 overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all\"><thead class=\"border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold\"><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Nombre</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Codigo</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Precio Venta</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Cantidad</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Tipo Salida</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Fecha</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Usuario Salida</th></thead> <tbody x-ref=\"tbody\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<table id=\"productsTable\" class=\"max-h-full overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all\"><thead class=\"border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold\"><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Nombre</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Codigo</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Precio Venta</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Cantidad</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Tipo Salida</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Fecha</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Usuario Salida</th></thead> <tbody x-ref=\"tbody\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -89,7 +89,7 @@ func SalesTableOnly(contents []model.Producto_salida_join) templ.Component {
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(contents[i].Nombre)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/sales.templ`, Line: 35, Col: 71}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/sales.templ`, Line: 36, Col: 71}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
@@ -102,7 +102,7 @@ func SalesTableOnly(contents []model.Producto_salida_join) templ.Component {
 			var templ_7745c5c3_Var4 string
 			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatInt(contents[i].Codigo, 10))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/sales.templ`, Line: 36, Col: 94}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/sales.templ`, Line: 37, Col: 94}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
@@ -115,7 +115,7 @@ func SalesTableOnly(contents []model.Producto_salida_join) templ.Component {
 			var templ_7745c5c3_Var5 string
 			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatInt(contents[i].PrecioVenta, 10))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/sales.templ`, Line: 37, Col: 99}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/sales.templ`, Line: 38, Col: 99}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 			if templ_7745c5c3_Err != nil {
@@ -128,7 +128,7 @@ func SalesTableOnly(contents []model.Producto_salida_join) templ.Component {
 			var templ_7745c5c3_Var6 string
 			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatInt(contents[i].Cantidad, 10))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/sales.templ`, Line: 38, Col: 96}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/sales.templ`, Line: 39, Col: 96}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 			if templ_7745c5c3_Err != nil {
@@ -141,7 +141,7 @@ func SalesTableOnly(contents []model.Producto_salida_join) templ.Component {
 			var templ_7745c5c3_Var7 string
 			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(contents[i].TipoSalida)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/sales.templ`, Line: 39, Col: 75}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/sales.templ`, Line: 40, Col: 75}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 			if templ_7745c5c3_Err != nil {
@@ -154,7 +154,7 @@ func SalesTableOnly(contents []model.Producto_salida_join) templ.Component {
 			var templ_7745c5c3_Var8 string
 			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(contents[i].Fecha)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/sales.templ`, Line: 40, Col: 70}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/sales.templ`, Line: 41, Col: 70}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 			if templ_7745c5c3_Err != nil {
@@ -167,7 +167,7 @@ func SalesTableOnly(contents []model.Producto_salida_join) templ.Component {
 			var templ_7745c5c3_Var9 string
 			templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(contents[i].UsuarioSalida)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/sales.templ`, Line: 41, Col: 78}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/sales.templ`, Line: 42, Col: 78}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 			if templ_7745c5c3_Err != nil {
@@ -207,7 +207,7 @@ func SalesTransacTable(contents []model.TransactionProduct) templ.Component {
 			templ_7745c5c3_Var10 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<table id=\"productsTable\" class=\"max-h-60 overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all\"><thead class=\"border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold\"><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Nombre</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Codigo</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Precio Venta</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Cantidad</th></thead> <tbody x-ref=\"tbody\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<table id=\"productsTable\" class=\"overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all\"><thead class=\"border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold\"><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Nombre</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Codigo</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Precio Venta</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Cantidad</th></thead> <tbody x-ref=\"tbody\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -245,7 +245,7 @@ func SalesTransacTable(contents []model.TransactionProduct) templ.Component {
 			var templ_7745c5c3_Var13 string
 			templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatInt(contents[i].Price, 10))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/sales.templ`, Line: 62, Col: 93}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/sales.templ`, Line: 63, Col: 57}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
 			if templ_7745c5c3_Err != nil {
@@ -258,7 +258,7 @@ func SalesTransacTable(contents []model.TransactionProduct) templ.Component {
 			var templ_7745c5c3_Var14 string
 			templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatInt(contents[i].Quantity, 10))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/sales.templ`, Line: 63, Col: 96}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/sales.templ`, Line: 64, Col: 96}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
 			if templ_7745c5c3_Err != nil {
@@ -298,7 +298,7 @@ func CreateSale() templ.Component {
 			templ_7745c5c3_Var15 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form id=\"createSale\" hx-post=\"/create-sale\" hx-target=\"#productsTableDiv\" class=\"flex flex-col gap-4 align-middle justify-center mx-20\"><button id=\"startSale\" name=\"startSale\" hx-post=\"/start-sale\" hx-target=\"#productsTableDiv\" hx-swap=\"innerHTML\" class=\"bg-slate-500 bg-opacity-20 border border-slate-700\">Iniciar venta</button><p class=\"text-3xl font-bold\">Hacer venta</p><input required type=\"text\" id=\"barcode\" name=\"barcode\" placeholder=\"Codigo de producto\" hx-post=\"/small-table-search\" hx-trigger=\"input changed delay:500ms\" hx-target=\"#productSearchSmall\" hx-indicator=\".htmx-indicator\" class=\"bg-slate-500 border-slate-700 p-1\"> <input required type=\"text\" default=\"1\" name=\"quantity\" id=\"quantity\" placeholder=\"Cantidad\" class=\"bg-slate-500 border-slate-700 p-1\"> <select required default=\"venta\" name=\"type\" id=\"type\" class=\"bg-slate-500 border-slate-700 p-1\"><option value=\"1\">Venta</option> <option value=\"2\">Merma</option></select> <button type=\"submit\">Agregar producto</button> <button id=\"completeSale\" name=\"completeSale\" hx-post=\"/complete-sale\" hx-target=\"#productsTableDiv\" hx-swap=\"innerHTML\" class=\"bg-slate-500 bg-opacity-20 border border-slate-700\">Completar Venta</button></form><p hx-trigger=\"duplicateError from:body\" hx-get=\"/static/addUserDuplicate.html\" id=\"errorDupe\" class=\"text-red-600 text-center\"></p><p hx-trigger=\"invalidPrivilegeError from:body\" hx-get=\"/static/addUserInvalid.html\" id=\"errorInvalidPriv\" class=\"text-red-600 text-center\"></p><p hx-trigger=\"insertError from:body\" hx-get=\"/static/addUserInsert.html\" id=\"errorUserInsert\" class=\"text-red-600 text-center\"></p>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form id=\"createSale\" hx-post=\"/create-sale\" hx-target=\"#productsTableDiv\" class=\"flex flex-col gap-4 align-middle justify-center mx-20\"><button id=\"startSale\" name=\"startSale\" hx-post=\"/start-sale\" hx-target=\"#productsTableDiv\" hx-swap=\"innerHTML\" class=\"bg-slate-500 bg-opacity-20 border border-slate-700\">Iniciar venta</button><p class=\"text-3xl font-bold\">Hacer venta</p><input required type=\"text\" id=\"barcode\" name=\"barcode\" placeholder=\"Codigo de producto\" hx-post=\"/small-table-search\" hx-trigger=\"input changed delay:500ms\" hx-target=\"#productSearchSmall\" hx-indicator=\".htmx-indicator\" class=\"bg-slate-500 border-slate-700 p-1\"> <input required type=\"text\" default=\"1\" name=\"quantity\" id=\"quantity\" placeholder=\"Cantidad\" class=\"bg-slate-500 border-slate-700 p-1\"> <select required default=\"venta\" name=\"type\" id=\"type\" class=\"bg-slate-500 border-slate-700 p-1\"><option value=\"1\">Venta</option> <option value=\"2\">Merma</option></select> <button type=\"submit\">Agregar producto</button> <button id=\"completeSale\" name=\"completeSale\" hx-post=\"/complete-sale\" hx-target=\"#productsTableDiv\" hx-swap=\"innerHTML\" class=\"bg-slate-500 bg-opacity-20 border border-slate-700\">Completar Venta</button><p id=\"saleTotal\" hx-trigger=\"saleTotal from:body\" hx-target=\"this\" hx-post=\"/calculateTotal\" hx-swap=\"textContent\" class=\"size-fit\"></p></form><p hx-trigger=\"duplicateError from:body\" hx-get=\"/static/addUserDuplicate.html\" id=\"errorDupe\" class=\"text-red-600 text-center\"></p><p hx-trigger=\"invalidPrivilegeError from:body\" hx-get=\"/static/addUserInvalid.html\" id=\"errorInvalidPriv\" class=\"text-red-600 text-center\"></p><p hx-trigger=\"insertError from:body\" hx-get=\"/static/addUserInsert.html\" id=\"errorUserInsert\" class=\"text-red-600 text-center\"></p>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

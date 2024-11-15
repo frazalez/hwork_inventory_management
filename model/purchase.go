@@ -67,9 +67,9 @@ func AllPurchases(db *sql.DB) ([]Producto_entrada_join, error) {
 	from
     producto p
 	join
-    producto_entrada pe on p.producto_id = pe.pro_ent_producto
+    producto_entrada pe on p.producto_id = pe.pro_ent_pro_fk
 	JOIN
-    entrada e on pe.pro_ent_entrada = e.entrada_id
+    entrada e on pe.pro_ent_ent_fk = e.entrada_id
 	JOIN
     usuario u on e.entrada_usuario = u.usuario_id;`)
 	if err != nil {
@@ -91,7 +91,7 @@ func AllPurchases(db *sql.DB) ([]Producto_entrada_join, error) {
 
 	return producto, nil
 }
-func AddToPurchase(barcode int64, quantity int64, Purchasetype int64) error {
+func AddToPurchase(barcode int64, quantity int64) error {
 	var name string
 	var price int64
 	q, qErr := DB.Query(`SELECT producto_nombre, producto_precio
@@ -109,7 +109,7 @@ func AddToPurchase(barcode int64, quantity int64, Purchasetype int64) error {
 
 	r, rErr := DB.Exec(`INSERT INTO transaccion_entrada_producto
 	(name, code, price, quantity) VALUES
-	(?, ?, ?, ?, ?)`, name, barcode, price, quantity)
+	(?, ?, ?, ?)`, name, barcode, price, quantity)
 	if rErr != nil {
 		return fmt.Errorf("addToPurchase Insert: %v", rErr)
 	}
@@ -166,7 +166,7 @@ FROM transaccion_entrada_producto tep;`)
 	}
 
 	insertPurchaseRows, isErr := DB.Exec(`INSERT INTO entrada (entrada_fecha, entrada_usuario)
-		VALUES (?, ?, ?)`, time.Now().Format(time.DateTime), user)
+		VALUES (?, ?)`, time.Now().Format(time.DateTime), user)
 	if isErr != nil {
 		return fmt.Errorf("CompletePurchase insertentrada %v", isErr)
 	}
@@ -185,7 +185,7 @@ FROM transaccion_entrada_producto tep;`)
 		if err := PIDrow.Scan(&PID); err != nil {
 			return fmt.Errorf("CompletePurchase InsertTransaction FindPID: %v", err)
 		}
-		rows, err := DB.Exec(`INSERT INTO producto_entrada (pro_ent_entrada, pro_ent_producto, pro_ent_cantidad, pro_ent_precio)
+		rows, err := DB.Exec(`INSERT INTO producto_entrada (pro_ent_ent_fk, pro_ent_pro_fk, pro_ent_cantidad, pro_ent_precio)
 				VALUES (?,?,?,?)`, lastInsertID, PID, transacTable[i].Quantity, transacTable[i].Price)
 		if err != nil {
 			return fmt.Errorf("CompletePurchase InsertTransaction InsertIntoProductoentrada: %v", err)
@@ -194,4 +194,16 @@ FROM transaccion_entrada_producto tep;`)
 	}
 
 	return nil
+}
+
+func CalculateTotalPurchase() (int, error) {
+	row := DB.QueryRow(`select SUM(sq.p*sq.q)
+	from (SELECT price as p, quantity as q from transaccion_entrada_producto tsp) sq
+	;`)
+
+	var total int
+	if err := row.Scan(&total); err != nil {
+		return -1, fmt.Errorf("calculateTotalPurchase: %v", err)
+	}
+	return total, nil
 }

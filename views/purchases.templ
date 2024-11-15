@@ -4,85 +4,90 @@ import "inventoryManagement/model"
 import "strconv"
 
 templ PurchaseTable(contents []model.Producto_entrada_join) {
-<div class="max-h-[80vh] overflow-y-auto self-start">
+<div x-data="data()" class="max-h-full overflow-y-scroll ">
     <div id="productsTableDiv" name="productsTable">
         @PurchasesTableOnly(contents)
     </div>
-    <button id="viewPurchases" name="viewPurchases" hx-get="/get-purchase-table" hx-target="#productsTableDiv" hx-swap="innerHTML"
-        class="bg-slate-500 bg-opacity-20 border border-slate-700 p-2">
-        Ver Compras
-    </button>
 </div>
-    <div id="productSearchSmall"></div>
-    <div id="makePurchaseDiv">@CreatePurchase()</div>
+
+<button id="viewPurchases" name="viewPurchases" hx-get="/get-purchase-table" hx-target="#productsTableDiv" hx-swap="innerHTML"
+    class="h-max w-max justify-self-start self-start bg-slate-500 bg-opacity-20 border border-slate-700 p-2">
+    Ver ventas
+</button>
+<div id="productSearchSmall"></div>
+<div id="makePurchaseDiv">@CreatePurchase()</div>
 }
 
 templ PurchasesTableOnly(contents []model.Producto_entrada_join) {
 <table id="productsTable"
-    class="max-h-60 overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
-    <tr class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
-        <td class="border-slate-800 border p-2">Nombre</td>
-        <td class="border-slate-800 border p-2">Codigo</td>
-        <td class="border-slate-800 border p-2">Precio Compra</td>
-        <td class="border-slate-800 border p-2">Cantidad</td>
-        <td class="border-slate-800 border p-2">Fecha</td>
-        <td class="border-slate-800 border p-2">Usuario Salida</td>
-    </tr>
-    for i := range contents {
-    <tr class="border-collapse border-slate-800 border">
-        <td class="border-slate-800 border p-2">{contents[i].Nombre}</td>
-        <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Codigo, 10)}</td>
-        <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Precio, 10)}</td>
-        <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Cantidad, 10)}</td>
-        <td class="border-slate-800 border p-2">{contents[i].Fecha}</td>
-        <td class="border-slate-800 border p-2">{contents[i].Usuario}</td>
-    </tr>
-    }
+    class="max-h-full overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
+    <thead class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
+        <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Nombre</th>
+        <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Codigo</th>
+        <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Precio Compra</th>
+        <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Cantidad</th>
+        <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Fecha</th>
+        <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Usuario</th>
+    </thead>
+    <tbody x-ref="tbody">
+        for i := range contents {
+        <tr class="border-collapse border-slate-800 border">
+            <td class="border-slate-800 border p-2">{contents[i].Nombre}</td>
+            <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Codigo, 10)}</td>
+            <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Codigo, 10)}</td>
+            <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Cantidad, 10)}</td>
+            <td class="border-slate-800 border p-2">{contents[i].Fecha}</td>
+            <td class="border-slate-800 border p-2">{contents[i].Usuario}</td>
+        </tr>
+        }
+    </tbody>
 </table>
 }
 
 templ PurchasesTransacTable(contents []model.TransactionPurchase) {
-<table id="productsTable"
-    class="max-h-60 overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
-    <tr class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
-        <td class="border-slate-800 border p-2">Nombre</td>
-        <td class="border-slate-800 border p-2">Codigo</td>
-        <td class="border-slate-800 border p-2">Precio Compra</td>
-        <td class="border-slate-800 border p-2">Cantidad</td>
-    </tr>
-    for i := range contents {
-    <tr class="border-collapse border-slate-800 border">
-        <td class="border-slate-800 border p-2">{contents[i].Name}</td>
-        <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Code, 10)}</td>
-        <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Price, 10)}</td>
-        <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Quantity, 10)}</td>
-    </tr>
-    }
+<table id="productsTable" class="overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
+    <thead class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
+        <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Nombre</th>
+        <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Codigo</th>
+        <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Precio Compra</th>
+        <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Cantidad</th>
+    </thead>
+    <tbody x-ref="tbody">
+        for i := range contents {
+        <tr class="border-collapse border-slate-800 border">
+            <td class="border-slate-800 border p-2">{contents[i].Name}</td>
+            <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Code, 10)}</td>
+            <td class="border-slate-800 border p-2">
+                {strconv.FormatInt(contents[i].Price, 10)}</td>
+            <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Quantity, 10)}</td>
+        </tr>
+        }
+    </tbody>
 </table>
+
 }
 
 templ CreatePurchase() {
-<form id="createPurchase" hx-post="/create-Purchase" hx-target="#productsTableDiv"
+<form id="createPurchase" hx-post="/create-purchase" hx-target="#productsTableDiv"
     class="flex flex-col gap-4 align-middle justify-center mx-20">
-    <button id="startPurchase" name="startPurchase" hx-post="/start-Purchase" hx-target="#productsTableDiv" hx-swap="innerHTML"
+    <button id="startPurchase" name="startPurchase" hx-post="/start-purchase" hx-target="#productsTableDiv" hx-swap="innerHTML"
         class="bg-slate-500 bg-opacity-20 border border-slate-700">
-        Iniciar Compra
+        Iniciar compra
     </button>
     <p class="text-3xl font-bold">Hacer Compra</p>
     <input required type="text" id="barcode" name="barcode" placeholder="Codigo de producto"
-        hx-post="/small-table-search" hx-trigger="input changed delay:500ms" hx-target="#productSearchSmall"
+        hx-post="/small-table-search-purchase" hx-trigger="input changed delay:500ms" hx-target="#productSearchSmall"
         hx-indicator=".htmx-indicator" class="bg-slate-500 border-slate-700 p-1">
     <input required type="text" default="1" name="quantity" id="quantity" placeholder="Cantidad"
         class="bg-slate-500 border-slate-700 p-1">
-    <select required default="Compra" name="type" id="type" class="bg-slate-500 border-slate-700 p-1">
-        <option value="1">Compra</option>
-        <option value="2">Merma</option>
-    </select>
-    <button type="submit">Agregar producto</button>
-    <button id="completePurchase" name="completePurchase" hx-post="/complete-Purchase" hx-target="#productsTableDiv"
+    <button type="submit">Agregar
+        producto</button>
+    <button id="completePurchase" name="completePurchase" hx-post="/complete-purchase" hx-target="#productsTableDiv"
         hx-swap="innerHTML" class="bg-slate-500 bg-opacity-20 border border-slate-700">
         Completar Compra
     </button>
+    <p id="purchaseTotal" hx-trigger="purchaseTotal from:body" hx-target="this" hx-post="/calculateTotalPurchase" hx-swap="textContent"
+        class="size-fit"></p>
 </form>
 <p hx-trigger="duplicateError from:body" hx-get="/static/addUserDuplicate.html" id="errorDupe"
     class="text-red-600 text-center"></p>
