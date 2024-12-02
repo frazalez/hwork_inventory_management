@@ -1,0 +1,21 @@
+package views
+
+templ ModifyProduct(name string, code string, margin string, price string) {
+    <form id="modifyProduct"
+    hx-post="/modifyProduct"
+    hx-on::after-request="this.reset()"
+    hx-swap="none"
+    class="flex flex-col gap-4 align-middle justify-center">
+        <p class="text-2x1 font-bold">Modificar producto</p>
+        <input type="hidden" name="ogName" value={name} readonly/>
+        <input required type="text" name="name" value={name} placeholder="Nombre" class="bg-slate-500 border-slate-700 p-1">
+        <input required type="text" name="code" readonly value={code} placeholder="Codigo de barra" class="bg-slate-500 border border-slate-700 p-1">
+        <input required type="text" name="margin" value={margin} placeholder="Margen de venta" class="bg-slate-500 border border-slate-700 p-1">
+        <input required type="text" name="price" value={price} placeholder="Precio Inicial" class="bg-slate-500 border border-slate-700 p-1">
+        <button type="submit" class="bg-slate-500 bg-opacity-20 border border-slate-700">Modificar Producto</button>
+    </form>
+    <p hx-trigger="duplicateError from:body" hx-get="/static/addProductDuplicate.html" id="errorDupe" class="text-red-600 text-center"></p>
+    <p hx-trigger="invalidError from:body" hx-get="/static/addProductInvalid.html" id="errorInvalid" class="text-red-600 text-center"></p>
+    <p hx-trigger="insertError from:body" hx-get="/static/addProductInsert.html" id="errorUserInsert" class="text-red-600 text-center"></p>
+    //<a hx-trigger="refreshTable from:body" hx-put="/views/tables" id="refreshTable" hx-target="#productsTable"/>
+}

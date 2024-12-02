@@ -1,0 +1,310 @@
+package views
+
+import "inventoryManagement/model"
+import "strconv"
+
+templ ViewStats() {
+<div id="statsDiv" class="flex flex-row gap-3">
+    <div id="buttons" class="flex flex-col gap-1 w-1/4">
+        <form>
+            <input id="date" required name="date" type="date" class="bg-slate-600">
+            <input type="text" id="code" name="code" placeholder="Codigo de producto" hx-post="/tableSearch"
+                hx-trigger="input changed delay:500ms" hx-target="#search" class="bg-slate-500 border-slate-700 p-1">
+
+            <button type="submit" hx-target="#stats" hx-post="/mostSold" hx-swap="innerHTML"
+                class="border border-slate-700 px-2 py-1">
+                Producto mas vendido
+            </button>
+
+            <button hx-target="#stats" hx-post="/pSalesToDate" hx-swap="innerHTML"
+                class="border border-slate-700 px-2 py-1">
+                Ventas de producto desde la fecha
+            </button>
+
+            <button hx-target="#stats" hx-post="/dpSalesToDate" hx-swap="innerHTML"
+                class="border border-slate-700 px-2 py-1">
+                Diferencia en ventas del producto desde la fecha
+            </button>
+
+            <button hx-target="#stats" hx-post="/pHighestIncome" hx-swap="innerHTML"
+                class="border border-slate-700 px-2 py-1">
+                Producto de mayor ingresos desde la fecha
+            </button>
+
+            <button hx-target="#stats" hx-post="/incomeToDate" hx-swap="innerHTML"
+                class="border border-slate-700 px-2 py-1">
+                Ingresos desde la fecha
+            </button>
+
+            <button hx-target="#stats" hx-post="/incomeVar" hx-swap="innerHTML"
+                class="border border-slate-700 px-2 py-1">
+                Variacion en ingresos desde la fecha
+            </button>
+
+            <button hx-target="#stats" hx-post="/salesToDate" hx-swap="innerHTML"
+                class="border border-slate-700 px-2 py-1">
+                Numero de ventas desde la fecha
+            </button>
+
+            <button hx-target="#stats" hx-post="/dSalesToDate" hx-swap="innerHTML"
+                class="border border-slate-700 px-2 py-1">
+                Variacion en numero de ventas desde la fecha
+            </button>
+
+            <button hx-target="#stats" hx-post="/pExpense" hx-swap="innerHTML"
+                class="border border-slate-700 px-2 py-1">
+                Dinero gastado en producto desde la fecha
+            </button>
+
+            <button hx-target="#stats" hx-post="/pExpenseVar" hx-swap="innerHTML"
+                class="border border-slate-700 px-2 py-1">
+                Variacion en dinero gastado en producto desde la fecha
+            </button>
+
+            <button hx-target="#stats" hx-post="/expense" hx-swap="innerHTML" class="border border-slate-700 px-2 py-1">
+                Dinero total gastado desde la fecha
+            </button>
+
+            <button hx-target="#stats" hx-post="/expenseVar" hx-swap="innerHTML"
+                class="border border-slate-700 px-2 py-1">
+                Variacion en dinero total gastado desde la fecha
+            </button>
+
+        </form>
+
+    </div>
+    <div id="search"></div>
+    <div>
+        <script src="/static/echarts.min.js"></script>
+        <div id="stats">
+        </div>
+    </div>
+</div>
+}
+
+templ SearchTable(contents []model.ProductSmall) {
+<table id="productsTable" class="overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
+    <thead class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
+        <th class="border-slate-800 border p-2">Nombre</th>
+        <th class="border-slate-800 border p-2">Codigo</th>
+        <th class="border-slate-800 border p-2">Precio</th>
+    </thead>
+    <tbody>
+        for i := range contents {
+        <tr class="border-collapse border-slate-800 border">
+            <td class="border-slate-800 border p-2">{contents[i].Producto_nombre}</td>
+            <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Producto_codigo, 10)}</td>
+            <td class="border-slate-800 border p-2">
+                {strconv.FormatFloat(contents[i].Producto_precio,'f',1, 64)}</td>
+        </tr>
+        }
+    </tbody>
+</table>
+}
+
+templ MostSoldTable(name string, qtty int) {
+<table id="productsTable" class="overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
+    <thead class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
+        <th class="border-slate-800 border p-2">Nombre</th>
+        <th class="border-slate-800 border p-2">Cantidad</th>
+    </thead>
+    <tbody>
+        <tr class="border-collapse border-slate-800 border">
+            <td class="border-slate-800 border p-2">{name}</td>
+            <td class="border-slate-800 border p-2">{strconv.FormatInt(int64(qtty), 10)}</td>
+        </tr>
+    </tbody>
+</table>
+}
+
+templ SalesTimespan(contents []model.MostSoldProductData) {
+<table id="productsTable" class="overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
+    <thead class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
+        <th class="border-slate-800 border p-2">Nombre</th>
+        <th class="border-slate-800 border p-2">Cantidad</th>
+        <th class="border-slate-800 border p-2">Fecha</th>
+    </thead>
+    <tbody>
+        for i := range contents {
+        <tr class="border-collapse border-slate-800 border">
+            <td class="border-slate-800 border p-2">{contents[i].Name}</td>
+            <td class="border-slate-800 border p-2">{strconv.FormatInt(int64(contents[i].Quantity), 10)}</td>
+            <td class="border-slate-800 border p-2">
+                {contents[i].Date}</td>
+        </tr>
+        }
+    </tbody>
+</table>
+}
+templ DeltaSalesTimespan(contents []model.ProductSaleDelta) {
+<table id="productsTable" class="overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
+    <thead class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
+        <th class="border-slate-800 border p-2">Nombre</th>
+        <th class="border-slate-800 border p-2">Ventas</th>
+        <th class="border-slate-800 border p-2">Variacion</th>
+        <th class="border-slate-800 border p-2">Fecha</th>
+    </thead>
+    <tbody>
+        for i := range contents {
+        <tr class="border-collapse border-slate-800 border">
+            <td class="border-slate-800 border p-2">{contents[i].Name}</td>
+            <td class="border-slate-800 border p-2">{strconv.FormatInt(int64(contents[i].CurrentSales), 10)}</td>
+            <td class="border-slate-800 border p-2">
+                {strconv.FormatFloat(contents[i].MonthlyVariance,'f',1, 64)}</td>
+            <td class="border-slate-800 border p-2">
+                {contents[i].Date}</td>
+        </tr>
+        }
+    </tbody>
+</table>
+}
+templ ProductHighestIncome(contents model.MostProfitableProduct) {
+<table id="productsTable" class="overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
+    <thead class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
+        <th class="border-slate-800 border p-2">Nombre</th>
+        <th class="border-slate-800 border p-2">Ingresos</th>
+    </thead>
+    <tbody>
+        <tr class="border-collapse border-slate-800 border">
+            <td class="border-slate-800 border p-2">{contents.Name}</td>
+            <td class="border-slate-800 border p-2">{strconv.FormatInt(int64(contents.Profits), 10)}</td>
+        </tr>
+    </tbody>
+</table>
+}
+templ IncomeToDate(contents model.MostProfitableProduct) {
+<table id="productsTable" class="overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
+    <thead class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
+        <th class="border-slate-800 border p-2">Nombre</th>
+        <th class="border-slate-800 border p-2">Ingresos</th>
+    </thead>
+    <tbody>
+        <tr class="border-collapse border-slate-800 border">
+            <td class="border-slate-800 border p-2">{contents.Name}</td>
+            <td class="border-slate-800 border p-2">{strconv.FormatInt(int64(contents.Profits), 10)}</td>
+        </tr>
+    </tbody>
+</table>
+}
+templ IncomeVar(contents []model.ProfitDelta) {
+<table id="productsTable" class="overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
+    <thead class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
+        <th class="border-slate-800 border p-2">Ingresos</th>
+        <th class="border-slate-800 border p-2">Diferencia</th>
+        <th class="border-slate-800 border p-2">Fecha</th>
+    </thead>
+    <tbody>
+        for i := range contents {
+        <tr class="border-collapse border-slate-800 border">
+            <td class="border-slate-800 border p-2">{strconv.FormatInt(int64(contents[i].Profits), 10)}</td>
+            <td class="border-slate-800 border p-2">
+                {strconv.FormatFloat(contents[i].DifferencePrevious,'f',1, 64)}</td>
+            <td class="border-slate-800 border p-2">
+                {contents[i].Date}</td>
+        </tr>
+        }
+    </tbody>
+</table>
+}
+templ DeltaSalesToDate(contents []model.SaleDelta) {
+<table id="productsTable" class="overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
+    <thead class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
+        <th class="border-slate-800 border p-2">Ventas</th>
+        <th class="border-slate-800 border p-2">Diferencia</th>
+        <th class="border-slate-800 border p-2">Fecha</th>
+    </thead>
+    <tbody>
+        for i := range contents {
+        <tr class="border-collapse border-slate-800 border">
+            <td class="border-slate-800 border p-2">{strconv.FormatInt(int64(contents[i].Sales), 10)}</td>
+            <td class="border-slate-800 border p-2">
+                {strconv.FormatFloat(contents[i].Difference,'f',1, 64)}</td>
+            <td class="border-slate-800 border p-2">
+                {contents[i].Date}</td>
+        </tr>
+        }
+    </tbody>
+</table>
+}
+templ PExpense(contents model.MoneySpentProduct) {
+<table id="productsTable" class="overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
+    <thead class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
+        <th class="border-slate-800 border p-2">Nombre</th>
+        <th class="border-slate-800 border p-2">Gastos</th>
+    </thead>
+    <tbody>
+        <tr class="border-collapse border-slate-800 border">
+            <td class="border-slate-800 border p-2">{contents.Name}</td>
+            <td class="border-slate-800 border p-2">{strconv.FormatInt(int64(contents.Expenses), 10)}</td>
+        </tr>
+    </tbody>
+</table>
+}
+templ PExpenseVar(contents []model.MoneySpentProductDelta) {
+<table id="productsTable" class="overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
+    <thead class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
+        <th class="border-slate-800 border p-2">Nombre</th>
+        <th class="border-slate-800 border p-2">Gastos</th>
+        <th class="border-slate-800 border p-2">Variacion</th>
+        <th class="border-slate-800 border p-2">Fecha</th>
+    </thead>
+    <tbody>
+        for i := range contents {
+        <tr class="border-collapse border-slate-800 border">
+            <td class="border-slate-800 border p-2">{contents[i].Name}</td>
+            <td class="border-slate-800 border p-2">{strconv.FormatInt(int64(contents[i].Expenses), 10)}</td>
+            <td class="border-slate-800 border p-2">
+                {strconv.FormatFloat(contents[i].Difference,'f',1, 64)}</td>
+            <td class="border-slate-800 border p-2">
+                {contents[i].Date}</td>
+        </tr>
+        }
+    </tbody>
+</table>
+}
+templ Expense(contents model.MoneySpentTime) {
+<table id="productsTable" class="overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
+    <thead class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
+        <th class="border-slate-800 border p-2">Gastos totales</th>
+    </thead>
+    <tbody>
+        <tr class="border-collapse border-slate-800 border">
+            <td class="border-slate-800 border p-2">{strconv.FormatInt(int64(contents.Sales), 10)}</td>
+        </tr>
+    </tbody>
+</table>
+}
+templ ExpenseVar(contents []model.MoneySpentDelta) {
+<table id="productsTable" class="overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
+    <thead class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
+        <th class="border-slate-800 border p-2">Gastos</th>
+        <th class="border-slate-800 border p-2">Variacion</th>
+        <th class="border-slate-800 border p-2">Fecha</th>
+    </thead>
+    <tbody>
+        for i := range contents {
+        <tr class="border-collapse border-slate-800 border">
+            <td class="border-slate-800 border p-2">{strconv.FormatInt(int64(contents[i].Sales), 10)}</td>
+            <td class="border-slate-800 border p-2">
+                {strconv.FormatFloat(contents[i].Difference,'f',1, 64)}</td>
+            <td class="border-slate-800 border p-2">
+                {contents[i].Date}</td>
+        </tr>
+        }
+    </tbody>
+</table>
+}
+
+templ SalesToDate(contents int) {
+<table id="productsTable" class="overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
+    <thead class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
+        <th class="border-slate-800 border p-2">Ventas a la fecha</th>
+    </thead>
+    <tbody>
+        <tr class="border-collapse border-slate-800 border">
+            <td class="border-slate-800 border p-2">{strconv.FormatInt(int64(contents), 10)}</td>
+        </tr>
+    </tbody>
+</table>
+}
+
