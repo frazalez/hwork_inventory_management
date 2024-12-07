@@ -19,7 +19,7 @@ func SalesPutHandler(c echo.Context) error {
 		return c.Redirect(http.StatusSeeOther, "/login")
 	}
 
-	tables, err := model.AllSales(model.DB)
+	tables, err := model.AllSalesMain(model.DB)
 	if err != nil {
 		log.Printf("SalesPutHandler: %v", err)
 		return nil
@@ -97,16 +97,14 @@ func TablesSalesHandler(c echo.Context) error {
 	if usrCookieError != nil || loginCookieError != nil {
 		return c.Redirect(http.StatusSeeOther, "/login")
 	}
-
-	tables, err := model.AllSales(model.DB)
+	//tables tipo model.Sales
+	//campos Id, Fecha, Tipo, Usuario
+	tables, err := model.AllSalesMain(model.DB)
 	if err != nil {
 		log.Printf("TablesSalesHandler: %v", err)
 		return c.NoContent(http.StatusBadRequest)
 	}
 
-	for i := range tables {
-		fmt.Printf("%v %v %v %v", tables[i].Nombre, tables[i].Codigo, tables[i].PrecioVenta, tables[i].Cantidad)
-	}
 	if loginCookie.Value == "yes" && usrCookie.Value == "admin" || usrCookie.Value == "user" || usrCookie.Value == "manager" {
 		return views.SalesTableOnly(tables).Render(getParams(c))
 	} else {
@@ -139,7 +137,7 @@ func CompleteSaleHandler(c echo.Context) error {
 		return c.NoContent(http.StatusBadRequest)
 	}
 
-	allSales, err := model.AllSales(model.DB)
+	allSales, err := model.AllSalesMain(model.DB)
 	if err != nil {
 		fmt.Printf("CompleteSale GetAllSales: %v", err)
 		c.Response().Header().Add("HX-Trigger", "cancel")

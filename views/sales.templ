@@ -3,7 +3,7 @@ package views
 import "inventoryManagement/model"
 import "strconv"
 
-templ SellTable(contents []model.Producto_salida_join) {
+templ SellTable(contents []model.Salida) {
 <div x-data="data()" class="max-h-full overflow-y-scroll ">
     <div id="productsTableDiv" name="productsTable">
         @SalesTableOnly(contents)
@@ -18,7 +18,29 @@ templ SellTable(contents []model.Producto_salida_join) {
 <div id="makeSaleDiv">@CreateSale()</div>
 }
 
-templ SalesTableOnly(contents []model.Producto_salida_join) {
+templ SalesTableOnly(contents []model.Salida) {
+<table id="productsTable"
+    class="max-h-full overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
+    <thead class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
+        <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">ID</th>
+        <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Fecha</th>
+        <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Tipo</th>
+        <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Usuario</th>
+    </thead>
+    <tbody x-ref="tbody">
+        for i := range contents {
+        <tr class="border-collapse border-slate-800 border">
+            <td class="border-slate-800 border p-2">{strconv.FormatInt(contents[i].Id, 10)}</td>
+            <td class="border-slate-800 border p-2">{contents[i].Fecha}</td>
+            <td class="border-slate-800 border p-2">{contents[i].Tipo}</td>
+            <td class="border-slate-800 border p-2">{contents[i].Usuario}</td>
+        </tr>
+        }
+    </tbody>
+</table>
+}
+
+templ SalesTableJoin(contents []model.Producto_salida_join) {
 <table id="productsTable"
     class="max-h-full overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
     <thead class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">

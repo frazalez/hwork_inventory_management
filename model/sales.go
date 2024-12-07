@@ -8,9 +8,10 @@ import (
 )
 
 type Salida struct {
-	Salida_id      int64
-	Salida_fecha   time.Time
-	Salida_usuario int64
+	Id      int64
+	Fecha   string
+	Usuario string
+	Tipo string
 }
 
 type Salida_tipo struct {
@@ -60,6 +61,30 @@ func StartSale() error {
 	fmt.Println(r)
 	fmt.Println(r2)
 	return nil
+}
+func AllSalesMain(db *sql.DB) ([]Salida, error) {
+	var producto []Salida
+	rows, err := db.Query(`SELECT s.salida_id, s.salida_fecha, st.salida_tipo_nombre, u.usuario_nombre from salida s
+JOIN salida_tipo st on s.salida_tipo = st.salida_tipo_id
+JOIN usuario u on s.salida_usuario = u.usuario_id;`)
+	if err != nil {
+		return nil, fmt.Errorf("AllSalesMain Query error in line 67: %v", err)
+	}
+
+	defer rows.Close()
+	for rows.Next() {
+		var prod Salida
+		if err := rows.Scan(&prod.Id, &prod.Fecha, &prod.Tipo, &prod.Usuario); err != nil {
+			return nil, fmt.Errorf("AllSales: %v", err)
+		}
+		producto = append(producto, prod)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("AllSales: %v", err)
+	}
+
+	return producto, nil
 }
 func AllSales(db *sql.DB) ([]Producto_salida_join, error) {
 	var producto []Producto_salida_join
