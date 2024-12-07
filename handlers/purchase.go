@@ -19,7 +19,7 @@ func PurchasesPutHandler(c echo.Context) error {
 		return c.Redirect(http.StatusSeeOther, "/login")
 	}
 
-	tables, err := model.AllPurchases(model.DB)
+	tables, err := model.AllPurchasesMain(model.DB)
 	if err != nil {
 		log.Printf("PurchasesPutHandler: %v", err)
 		return nil
@@ -30,7 +30,6 @@ func PurchasesPutHandler(c echo.Context) error {
 	} else {
 		return c.Redirect(http.StatusSeeOther, "/login")
 	}
-
 }
 
 func SmallPurchaseTableSearchHandler(c echo.Context) error {
@@ -51,6 +50,7 @@ func SmallPurchaseTableSearchHandler(c echo.Context) error {
 
 	return views.ProductsTableSmall(data).Render(getParams(c))
 }
+
 func CreatePurchaseHandler(c echo.Context) error {
 	barcode, bcErr := strconv.ParseInt(c.FormValue("barcode"), 10, 64)
 	if bcErr != nil {
@@ -91,21 +91,17 @@ func TablesPurchasesHandler(c echo.Context) error {
 		return c.Redirect(http.StatusSeeOther, "/login")
 	}
 
-	tables, err := model.AllPurchases(model.DB)
+	tables, err := model.AllPurchasesMain(model.DB)
 	if err != nil {
 		log.Printf("TablesPurchasesHandler: %v", err)
 		return c.NoContent(http.StatusBadRequest)
 	}
 
-	for i := range tables {
-		fmt.Printf("%v %v %v %v", tables[i].Nombre, tables[i].Codigo, tables[i].Precio, tables[i].Cantidad)
-	}
 	if loginCookie.Value == "yes" && usrCookie.Value == "admin" || usrCookie.Value == "user" || usrCookie.Value == "manager" {
 		return views.PurchasesTableOnly(tables).Render(getParams(c))
 	} else {
 		return c.Redirect(http.StatusSeeOther, "/login")
 	}
-
 }
 
 func StartPurchaseHandler(c echo.Context) error {
@@ -132,7 +128,7 @@ func CompletePurchaseHandler(c echo.Context) error {
 		return c.NoContent(http.StatusBadRequest)
 	}
 
-	allPurchases, err := model.AllPurchases(model.DB)
+	allPurchases, err := model.AllPurchasesMain(model.DB)
 	if err != nil {
 		fmt.Printf("CompletePurchase GetAllPurchases: %v", err)
 		c.Response().Header().Add("HX-Trigger", "cancel")

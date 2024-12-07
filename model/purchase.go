@@ -8,10 +8,9 @@ import (
 )
 
 type Entrada struct {
-	Entrada_id           int64
-	Entrada_fecha        time.Time
-	Entrada_usuario      int64
-	Entrada_distribuidor int64
+	Id      int64
+	Fecha   string
+	Usuario string
 }
 
 type Producto_entrada struct {
@@ -58,6 +57,35 @@ func StartPurchase() error {
 	}
 	return nil
 }
+
+func AllPurchasesMain(db *sql.DB) ([]Entrada, error) {
+	var producto []Entrada
+	rows, err := db.Query(`select
+    e.entrada_id, e.entrada_fecha, u.usuario_nombre
+    from
+    entrada e
+	JOIN
+    usuario u on e.entrada_usuario = u.usuario_id;`)
+	if err != nil {
+		return nil, fmt.Errorf("AllPurchases Query error in purchase.go line 70: %v", err)
+	}
+
+	defer rows.Close()
+	for rows.Next() {
+		var prod Entrada
+		if err := rows.Scan(&prod.Id, &prod.Fecha, &prod.Usuario); err != nil {
+			return nil, fmt.Errorf("AllPurchases scan error in purchase.go line 77: %v", err)
+		}
+		producto = append(producto, prod)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("AllPurchases: %v", err)
+	}
+
+	return producto, nil
+}
+
 func AllPurchases(db *sql.DB) ([]Producto_entrada_join, error) {
 	var producto []Producto_entrada_join
 	rows, err := db.Query(`select
@@ -91,6 +119,7 @@ func AllPurchases(db *sql.DB) ([]Producto_entrada_join, error) {
 
 	return producto, nil
 }
+
 func AddToPurchase(barcode int64, quantity int64) error {
 	var name string
 	var price int64

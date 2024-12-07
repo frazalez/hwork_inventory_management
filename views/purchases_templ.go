@@ -8,10 +8,12 @@ package views
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "inventoryManagement/model"
-import "strconv"
+import (
+	"inventoryManagement/model"
+	"strconv"
+)
 
-func PurchaseTable(contents []model.Producto_entrada_join) templ.Component {
+func PurchaseTable(contents []model.Entrada) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -56,7 +58,7 @@ func PurchaseTable(contents []model.Producto_entrada_join) templ.Component {
 	})
 }
 
-func PurchasesTableOnly(contents []model.Producto_entrada_join) templ.Component {
+func PurchasesTableOnly(contents []model.Entrada) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -77,7 +79,7 @@ func PurchasesTableOnly(contents []model.Producto_entrada_join) templ.Component 
 			templ_7745c5c3_Var2 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<table id=\"productsTable\" class=\"max-h-full overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all\"><thead class=\"border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold\"><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Nombre</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Codigo</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Precio Compra</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Cantidad</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Fecha</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Usuario</th></thead> <tbody x-ref=\"tbody\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<table id=\"productsTable\" class=\"max-h-full overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all\"><thead class=\"border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold\"><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">ID</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Fecha</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Usuario</th></thead> <tbody x-ref=\"tbody\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -87,9 +89,9 @@ func PurchasesTableOnly(contents []model.Producto_entrada_join) templ.Component 
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var3 string
-			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(contents[i].Nombre)
+			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatInt(contents[i].Id, 10))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/purchases.templ`, Line: 35, Col: 71}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/purchases.templ`, Line: 43, Col: 84}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
@@ -100,9 +102,9 @@ func PurchasesTableOnly(contents []model.Producto_entrada_join) templ.Component 
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var4 string
-			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatInt(contents[i].Codigo, 10))
+			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(contents[i].Fecha)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/purchases.templ`, Line: 36, Col: 94}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/purchases.templ`, Line: 44, Col: 64}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
@@ -113,35 +115,61 @@ func PurchasesTableOnly(contents []model.Producto_entrada_join) templ.Component 
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var5 string
-			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatInt(contents[i].Codigo, 10))
+			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(contents[i].Usuario)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/purchases.templ`, Line: 37, Col: 94}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/purchases.templ`, Line: 45, Col: 66}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</td><td class=\"border-slate-800 border p-2\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</td></tr>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var6 string
-			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatInt(contents[i].Cantidad, 10))
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/purchases.templ`, Line: 38, Col: 96}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</td><td class=\"border-slate-800 border p-2\">")
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</tbody></table>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		return templ_7745c5c3_Err
+	})
+}
+
+func PurchasesTableJoin(contents []model.Producto_entrada_join) templ.Component {
+	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
+			return templ_7745c5c3_CtxErr
+		}
+		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+		if !templ_7745c5c3_IsBuffer {
+			defer func() {
+				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err == nil {
+					templ_7745c5c3_Err = templ_7745c5c3_BufErr
+				}
+			}()
+		}
+		ctx = templ.InitializeContext(ctx)
+		templ_7745c5c3_Var6 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var6 == nil {
+			templ_7745c5c3_Var6 = templ.NopComponent
+		}
+		ctx = templ.ClearChildren(ctx)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<table id=\"productsTable\" class=\"max-h-full overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all\"><thead class=\"border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold\"><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Nombre</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Codigo</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Precio Compra</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Cantidad</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Fecha</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Usuario</th></thead> <tbody x-ref=\"tbody\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		for i := range contents {
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<tr class=\"border-collapse border-slate-800 border\"><td class=\"border-slate-800 border p-2\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var7 string
-			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(contents[i].Fecha)
+			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(contents[i].Nombre)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/purchases.templ`, Line: 39, Col: 70}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/purchases.templ`, Line: 68, Col: 65}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 			if templ_7745c5c3_Err != nil {
@@ -152,11 +180,63 @@ func PurchasesTableOnly(contents []model.Producto_entrada_join) templ.Component 
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var8 string
-			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(contents[i].Usuario)
+			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatInt(contents[i].Codigo, 10))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/purchases.templ`, Line: 40, Col: 72}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/purchases.templ`, Line: 69, Col: 88}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</td><td class=\"border-slate-800 border p-2\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var9 string
+			templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatInt(contents[i].Codigo, 10))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/purchases.templ`, Line: 70, Col: 88}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</td><td class=\"border-slate-800 border p-2\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var10 string
+			templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatInt(contents[i].Cantidad, 10))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/purchases.templ`, Line: 71, Col: 90}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</td><td class=\"border-slate-800 border p-2\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var11 string
+			templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(contents[i].Fecha)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/purchases.templ`, Line: 72, Col: 64}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</td><td class=\"border-slate-800 border p-2\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var12 string
+			templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(contents[i].Usuario)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/purchases.templ`, Line: 73, Col: 66}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -189,9 +269,9 @@ func PurchasesTransacTable(contents []model.TransactionPurchase) templ.Component
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var9 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var9 == nil {
-			templ_7745c5c3_Var9 = templ.NopComponent
+		templ_7745c5c3_Var13 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var13 == nil {
+			templ_7745c5c3_Var13 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<table id=\"productsTable\" class=\"overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all\"><thead class=\"border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold\"><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Nombre</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Codigo</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Precio Compra</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Cantidad</th></thead> <tbody x-ref=\"tbody\">")
@@ -203,25 +283,12 @@ func PurchasesTransacTable(contents []model.TransactionPurchase) templ.Component
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var10 string
-			templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(contents[i].Name)
+			var templ_7745c5c3_Var14 string
+			templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(contents[i].Name)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/purchases.templ`, Line: 58, Col: 69}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/purchases.templ`, Line: 91, Col: 63}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</td><td class=\"border-slate-800 border p-2\">")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var11 string
-			templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatInt(contents[i].Code, 10))
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/purchases.templ`, Line: 59, Col: 92}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -229,12 +296,12 @@ func PurchasesTransacTable(contents []model.TransactionPurchase) templ.Component
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var12 string
-			templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatInt(contents[i].Price, 10))
+			var templ_7745c5c3_Var15 string
+			templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatInt(contents[i].Code, 10))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/purchases.templ`, Line: 61, Col: 57}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/purchases.templ`, Line: 92, Col: 86}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var15))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -242,12 +309,25 @@ func PurchasesTransacTable(contents []model.TransactionPurchase) templ.Component
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var13 string
-			templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatInt(contents[i].Quantity, 10))
+			var templ_7745c5c3_Var16 string
+			templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatInt(contents[i].Price, 10))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/purchases.templ`, Line: 62, Col: 96}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/purchases.templ`, Line: 94, Col: 48}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var16))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</td><td class=\"border-slate-800 border p-2\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var17 string
+			templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatInt(contents[i].Quantity, 10))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/purchases.templ`, Line: 96, Col: 90}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var17))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -280,9 +360,9 @@ func CreatePurchase() templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var14 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var14 == nil {
-			templ_7745c5c3_Var14 = templ.NopComponent
+		templ_7745c5c3_Var18 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var18 == nil {
+			templ_7745c5c3_Var18 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form id=\"createPurchase\" hx-post=\"/create-purchase\" hx-target=\"#productsTableDiv\" class=\"flex flex-col gap-4 align-middle justify-center mx-20\"><button id=\"startPurchase\" name=\"startPurchase\" hx-post=\"/start-purchase\" hx-target=\"#productsTableDiv\" hx-swap=\"innerHTML\" class=\"bg-slate-500 bg-opacity-20 border border-slate-700\">Iniciar compra</button><p class=\"text-3xl font-bold\">Hacer Compra</p><input required type=\"text\" id=\"barcode\" name=\"barcode\" placeholder=\"Codigo de producto\" hx-post=\"/small-table-search-purchase\" hx-trigger=\"input changed delay:500ms\" hx-target=\"#productSearchSmall\" hx-indicator=\".htmx-indicator\" class=\"bg-slate-500 border-slate-700 p-1\"> <input required type=\"text\" default=\"1\" name=\"quantity\" id=\"quantity\" placeholder=\"Cantidad\" class=\"bg-slate-500 border-slate-700 p-1\"> <button type=\"submit\">Agregar producto</button> <button id=\"completePurchase\" name=\"completePurchase\" hx-post=\"/complete-purchase\" hx-target=\"#productsTableDiv\" hx-swap=\"innerHTML\" class=\"bg-slate-500 bg-opacity-20 border border-slate-700\">Completar Compra</button><p id=\"purchaseTotal\" hx-trigger=\"purchaseTotal from:body\" hx-target=\"this\" hx-post=\"/calculateTotalPurchase\" hx-swap=\"textContent\" class=\"size-fit\"></p></form><p hx-trigger=\"duplicateError from:body\" hx-get=\"/static/addUserDuplicate.html\" id=\"errorDupe\" class=\"text-red-600 text-center\"></p><p hx-trigger=\"invalidPrivilegeError from:body\" hx-get=\"/static/addUserInvalid.html\" id=\"errorInvalidPriv\" class=\"text-red-600 text-center\"></p><p hx-trigger=\"insertError from:body\" hx-get=\"/static/addUserInsert.html\" id=\"errorUserInsert\" class=\"text-red-600 text-center\"></p>")
