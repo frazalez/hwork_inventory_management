@@ -109,7 +109,7 @@ func ModifyProductHandler(c echo.Context) error {
 	}
 
 	margin, marginErr := strconv.ParseFloat(c.FormValue("margin"), 64)
-	if codeErr != nil {
+	if marginErr != nil {
 		fmt.Printf("ModifyProduct ParseFloatMargin: %v", marginErr)
 		return c.NoContent(http.StatusBadRequest)
 	}
@@ -127,7 +127,6 @@ func ModifyProductHandler(c echo.Context) error {
 
 	c.Response().Header().Add("HX-Trigger", "refreshTable")
 	return nil
-
 }
 
 func DisableProductHandler(c echo.Context) error {

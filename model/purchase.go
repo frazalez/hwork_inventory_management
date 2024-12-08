@@ -205,7 +205,7 @@ FROM transaccion_entrada_producto tep;`)
 	var lastInsertID int
 
 	if err := lastInsertRow.Scan(&lastInsertID); err != nil {
-		return fmt.Errorf(`CompleteTable findLastInsertID`, err)
+		return fmt.Errorf(`CompleteTable findLastInsertID: %v`, err)
 	}
 
 	for i := range transacTable {

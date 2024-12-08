@@ -11,7 +11,8 @@ type Salida struct {
 	Id      int64
 	Fecha   string
 	Usuario string
-	Tipo string
+	Tipo    string
+	Total   int64
 }
 
 type Salida_tipo struct {
@@ -62,11 +63,17 @@ func StartSale() error {
 	fmt.Println(r2)
 	return nil
 }
+
 func AllSalesMain(db *sql.DB) ([]Salida, error) {
 	var producto []Salida
-	rows, err := db.Query(`SELECT s.salida_id, s.salida_fecha, st.salida_tipo_nombre, u.usuario_nombre from salida s
-JOIN salida_tipo st on s.salida_tipo = st.salida_tipo_id
-JOIN usuario u on s.salida_usuario = u.usuario_id;`)
+	rows, err := db.Query(`SELECT s.salida_id, s.salida_fecha, st.salida_tipo_nombre, u.usuario_nombre, selectTotal.total
+    FROM salida s
+    JOIN salida_tipo st on s.salida_tipo = st.salida_tipo_id
+    JOIN usuario u on s.salida_usuario = u.usuario_id
+    JOIN (select ps.pro_sal_salida as psId, sum(ps.pro_sal_precio) as total
+		      FROM producto_salida ps
+		      GROUP BY ps.pro_sal_salida) as selectTotal on selectTotal.psId = s.salida_id
+    WHERE st.salida_tipo_nombre = "venta";`)
 	if err != nil {
 		return nil, fmt.Errorf("AllSalesMain Query error in line 67: %v", err)
 	}
@@ -74,7 +81,7 @@ JOIN usuario u on s.salida_usuario = u.usuario_id;`)
 	defer rows.Close()
 	for rows.Next() {
 		var prod Salida
-		if err := rows.Scan(&prod.Id, &prod.Fecha, &prod.Tipo, &prod.Usuario); err != nil {
+		if err := rows.Scan(&prod.Id, &prod.Fecha, &prod.Tipo, &prod.Usuario, &prod.Total); err != nil {
 			return nil, fmt.Errorf("AllSales: %v", err)
 		}
 		producto = append(producto, prod)
@@ -86,7 +93,38 @@ JOIN usuario u on s.salida_usuario = u.usuario_id;`)
 
 	return producto, nil
 }
-func AllSales(db *sql.DB) ([]Producto_salida_join, error) {
+
+func AllLossMain(db *sql.DB) ([]Salida, error) {
+	var producto []Salida
+	rows, err := db.Query(`SELECT s.salida_id, s.salida_fecha, st.salida_tipo_nombre, u.usuario_nombre, selectTotal.total
+    FROM salida s
+    JOIN salida_tipo st on s.salida_tipo = st.salida_tipo_id
+    JOIN usuario u on s.salida_usuario = u.usuario_id
+    JOIN (select ps.pro_sal_salida as psId, sum(ps.pro_sal_precio) as total
+		      FROM producto_salida ps
+		      GROUP BY ps.pro_sal_salida) as selectTotal on selectTotal.psId = s.salida_id
+    WHERE st.salida_tipo_nombre = "merma";`)
+	if err != nil {
+		return nil, fmt.Errorf("AllLossMain Query error in line 67: %v", err)
+	}
+
+	defer rows.Close()
+	for rows.Next() {
+		var prod Salida
+		if err := rows.Scan(&prod.Id, &prod.Fecha, &prod.Tipo, &prod.Usuario, &prod.Total); err != nil {
+			return nil, fmt.Errorf("AllSales: %v", err)
+		}
+		producto = append(producto, prod)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("AllLoss: %v", err)
+	}
+
+	return producto, nil
+}
+
+func AllSales(db *sql.DB, requestedSale string) ([]Producto_salida_join, error) {
 	var producto []Producto_salida_join
 	rows, err := db.Query(`select
     p.producto_nombre, p.producto_codigo,
@@ -101,7 +139,8 @@ func AllSales(db *sql.DB) ([]Producto_salida_join, error) {
 	JOIN
     salida_tipo st on s.salida_tipo = st.salida_tipo_id
 	JOIN
-    usuario u on s.salida_usuario = u.usuario_id;`)
+    usuario u on s.salida_usuario = u.usuario_id
+    WHERE s.salida_id = ? AND st.salida_tipo_nombre = "venta";`, requestedSale)
 	if err != nil {
 		return nil, fmt.Errorf("AllSales: %v", err)
 	}
@@ -122,7 +161,46 @@ func AllSales(db *sql.DB) ([]Producto_salida_join, error) {
 
 	return producto, nil
 }
-func AddToSale(barcode int64, quantity int64, saletype int64) error {
+
+func AllLoss(db *sql.DB, requestedLoss string) ([]Producto_salida_join, error) {
+	var producto []Producto_salida_join
+	rows, err := db.Query(`select
+    p.producto_nombre, p.producto_codigo,
+    ps.pro_sal_precio, ps.pro_sal_cantidad ,
+    st.salida_tipo_nombre,  s.salida_fecha , u.usuario_nombre
+	from
+    producto p
+	join
+    producto_salida ps on p.producto_id = ps.pro_sal_producto
+	JOIN
+    salida s on ps.pro_sal_salida = s.salida_id
+	JOIN
+    salida_tipo st on s.salida_tipo = st.salida_tipo_id
+	JOIN
+    usuario u on s.salida_usuario = u.usuario_id
+    WHERE s.salida_id = ? AND st.salida_tipo_nombre = "merma";`, requestedLoss)
+	if err != nil {
+		return nil, fmt.Errorf("AllLoss: %v", err)
+	}
+
+	defer rows.Close()
+	for rows.Next() {
+		var prod Producto_salida_join
+		if err := rows.Scan(&prod.Nombre, &prod.Codigo, &prod.PrecioVenta, &prod.Cantidad, &prod.TipoSalida, &prod.Fecha, &prod.UsuarioSalida); err != nil {
+			return nil, fmt.Errorf("AllLoss: %v", err)
+		}
+		fmt.Println(prod.Cantidad, prod.Codigo, prod.Nombre)
+		producto = append(producto, prod)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("AllLoss: %v", err)
+	}
+
+	return producto, nil
+}
+
+func AddToSale(barcode int64, quantity int64) error {
 	var name string
 	var price int64
 	q, qErr := DB.Query(`SELECT producto_nombre, producto_precio
@@ -140,9 +218,35 @@ func AddToSale(barcode int64, quantity int64, saletype int64) error {
 
 	r, rErr := DB.Exec(`INSERT INTO transaccion_salida_producto
 	(name, code, price, quantity, type) VALUES
-	(?, ?, ?, ?, ?)`, name, barcode, price, quantity, saletype)
+	(?, ?, ?, ?, ?)`, name, barcode, price, quantity, 1)
 	if rErr != nil {
 		return fmt.Errorf("addToSale Insert: %v", rErr)
+	}
+	fmt.Println(r)
+	return nil
+}
+
+func AddToLoss(barcode int64, quantity int64) error {
+	var name string
+	var price int64
+	q, qErr := DB.Query(`SELECT producto_nombre, producto_precio
+	FROM producto
+	WHERE producto_codigo = ?`, barcode)
+	if qErr != nil {
+		return fmt.Errorf("addToLoss Query: %v", qErr)
+	}
+	defer q.Close()
+	for q.Next() {
+		if err := q.Scan(&name, &price); err != nil {
+			return fmt.Errorf("addToLoss Scan: %v", err)
+		}
+	}
+
+	r, rErr := DB.Exec(`INSERT INTO transaccion_salida_producto
+	(name, code, price, quantity, type) VALUES
+	(?, ?, ?, ?, ?)`, name, barcode, price, quantity, 2)
+	if rErr != nil {
+		return fmt.Errorf("addToLoss Insert: %v", rErr)
 	}
 	fmt.Println(r)
 	return nil
@@ -177,7 +281,7 @@ func GetSaleTransactionTable() ([]TransactionProduct, error) {
 
 func CompleteSale(username string) error {
 	transacRows, trError := DB.Query(`SELECT tsp.name, tsp.code, tsp.price , tsp.quantity, tsp.type
-FROM transaccion_salida_producto tsp;`)
+FROM transaccion_salida_producto tsp WHERE tsp.type = 1;`)
 
 	if trError != nil {
 		return fmt.Errorf("CompleteSale SelectTransactionErr: %v", trError)
@@ -201,7 +305,7 @@ FROM transaccion_salida_producto tsp;`)
 	log.Print(transacTable[0].Type)
 
 	insertSaleRows, isErr := DB.Exec(`INSERT INTO salida (salida_fecha, salida_tipo, salida_usuario)
-		VALUES (?, ?, ?)`, time.Now().Format(time.DateTime), transacTable[0].Type, user)
+		VALUES (?, ?, ?)`, time.Now().Format(time.DateTime), 1, user)
 	if isErr != nil {
 		return fmt.Errorf("CompleteSale insertSalida %v", isErr)
 	}
@@ -211,7 +315,7 @@ FROM transaccion_salida_producto tsp;`)
 	var lastInsertID int
 
 	if err := lastInsertRow.Scan(&lastInsertID); err != nil {
-		return fmt.Errorf(`CompleteTable findLastInsertID`, err)
+		return fmt.Errorf(`CompleteTable findLastInsertID %v`, err)
 	}
 
 	for i := range transacTable {
@@ -227,6 +331,63 @@ FROM transaccion_salida_producto tsp;`)
 		}
 		log.Printf("rows affected: %v", rows)
 	}
+
+	StartSale()
+
+	return nil
+}
+
+func CompleteLoss(username string) error {
+	transacRows, trError := DB.Query(`SELECT tsp.name, tsp.code, tsp.price , tsp.quantity, tsp.type
+FROM transaccion_salida_producto tsp WHERE tsp.type = 2;`)
+
+	if trError != nil {
+		return fmt.Errorf("CompleteLoss SelectTransactionErr: %v", trError)
+	}
+	var transacTable []TransactionProduct
+
+	defer transacRows.Close()
+	for transacRows.Next() {
+		var transacRowValues TransactionProduct
+		if err := transacRows.Scan(&transacRowValues.Name, &transacRowValues.Code, &transacRowValues.Price, &transacRowValues.Quantity, &transacRowValues.Type); err != nil {
+			return fmt.Errorf("CompleteLoss transacRowsScan %v", err)
+		}
+		transacTable = append(transacTable, transacRowValues)
+	}
+
+	user, uError := getIDFromUsername(username)
+	if uError != nil {
+		return fmt.Errorf("CompletLoss GetIDFromUsername: %v", uError)
+	}
+
+	_, isErr := DB.Exec(`INSERT INTO salida (salida_fecha, salida_tipo, salida_usuario)
+		VALUES (?, ?, ?)`, time.Now().Format(time.DateTime), 2, user)
+	if isErr != nil {
+		return fmt.Errorf("CompleteLoss insertSalida %v", isErr)
+	}
+
+	lastInsertRow := DB.QueryRow(`SELECT LAST_INSERT_ID() FROM salida`)
+	var lastInsertID int
+
+	if err := lastInsertRow.Scan(&lastInsertID); err != nil {
+		return fmt.Errorf(`CompleteLoss findLastInsertID: %v`, err)
+	}
+
+	for i := range transacTable {
+		PIDrow := DB.QueryRow(`SELECT producto_id FROM producto WHERE producto_codigo = ?`, transacTable[i].Code)
+		var PID int
+		if err := PIDrow.Scan(&PID); err != nil {
+			return fmt.Errorf("CompleteLoss InsertTransaction FindPID: %v", err)
+		}
+		rows, err := DB.Exec(`INSERT INTO producto_salida (pro_sal_salida, pro_sal_producto, pro_sal_cantidad, pro_sal_precio)
+				VALUES (?,?,?,?)`, lastInsertID, PID, transacTable[i].Quantity, transacTable[i].Price)
+		if err != nil {
+			return fmt.Errorf("CompleteSale InsertTransaction InsertIntoProductoSalida: %v", err)
+		}
+		log.Printf("rows affected: %v", rows)
+	}
+
+	StartSale()
 
 	return nil
 }
