@@ -104,6 +104,27 @@ func TablesPurchasesHandler(c echo.Context) error {
 	}
 }
 
+func TablesPurchasesDetailHandler(c echo.Context) error {
+	usrCookie, usrCookieError := c.Cookie("usrtype")
+	loginCookie, loginCookieError := c.Cookie("login")
+
+	if usrCookieError != nil || loginCookieError != nil {
+		return c.Redirect(http.StatusSeeOther, "/login")
+	}
+
+	tables, err := model.AllPurchases(model.DB, c.FormValue("purchaseId"))
+	if err != nil {
+		log.Printf("TablesPurchasesHandler: %v", err)
+		return c.NoContent(http.StatusBadRequest)
+	}
+
+	if loginCookie.Value == "yes" && usrCookie.Value == "admin" || usrCookie.Value == "user" || usrCookie.Value == "manager" {
+		return views.PurchasesTableJoin(tables).Render(getParams(c))
+	} else {
+		return c.Redirect(http.StatusSeeOther, "/login")
+	}
+}
+
 func StartPurchaseHandler(c echo.Context) error {
 	table := []model.TransactionPurchase{}
 	if err := model.StartPurchase(); err != nil {

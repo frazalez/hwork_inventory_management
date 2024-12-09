@@ -86,7 +86,7 @@ func AllPurchasesMain(db *sql.DB) ([]Entrada, error) {
 	return producto, nil
 }
 
-func AllPurchases(db *sql.DB) ([]Producto_entrada_join, error) {
+func AllPurchases(db *sql.DB, id string) ([]Producto_entrada_join, error) {
 	var producto []Producto_entrada_join
 	rows, err := db.Query(`select
     p.producto_nombre, p.producto_codigo,
@@ -99,7 +99,9 @@ func AllPurchases(db *sql.DB) ([]Producto_entrada_join, error) {
 	JOIN
     entrada e on pe.pro_ent_ent_fk = e.entrada_id
 	JOIN
-    usuario u on e.entrada_usuario = u.usuario_id;`)
+    usuario u on e.entrada_usuario = u.usuario_id
+  WHERE 
+    e.entrada_id = ?;`, id)
 	if err != nil {
 		return nil, fmt.Errorf("AllPurchases: %v", err)
 	}

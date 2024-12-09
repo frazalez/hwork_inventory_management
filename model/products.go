@@ -14,6 +14,7 @@ type Producto struct {
 	Producto_margen   float64
 	Producto_precio   float64
 	Producto_activado bool
+	Cantidad          int64
 }
 
 type ProductSmall struct {
@@ -32,9 +33,35 @@ type TransactionProduct struct {
 
 func AllProducts(db *sql.DB) ([]Producto, error) {
 	var producto []Producto
-	rows, err := db.Query("SELECT * FROM producto")
+	rows, err := db.Query(`select * from producto;`)
 	if err != nil {
 		return nil, fmt.Errorf("AllProducts: %v", err)
+	}
+
+	var quantArray []struct {
+		Id       int64
+		Quantity int64
+	}
+	rowsQuant, rqErr := db.Query(`select pp.producto_id, sum(pee.pro_ent_cantidad) - sum(pss.pro_sal_cantidad) as quant
+		from producto pp
+		join producto_entrada pee on pp.producto_id = pee.pro_ent_pro_fk
+		join producto_salida pss on pp.producto_id = pss.pro_sal_producto
+		where producto_activado = TRUE
+		group by producto_id;`)
+
+	if rqErr != nil {
+		return nil, fmt.Errorf("Error getting quantity in model/products.go: AllProducts(db) ([]Producto, error): %v", rqErr)
+	}
+	defer rowsQuant.Close()
+	for rowsQuant.Next() {
+		var cantidad struct {
+			Id       int64
+			Quantity int64
+		}
+		if err := rowsQuant.Scan(&cantidad.Id, &cantidad.Quantity); err != nil {
+			return nil, fmt.Errorf("Error scanning quantity from database in model/products.go: AllProducts: %v", err)
+		}
+		quantArray = append(quantArray, cantidad)
 	}
 
 	defer rows.Close()
@@ -43,10 +70,17 @@ func AllProducts(db *sql.DB) ([]Producto, error) {
 		if err := rows.Scan(&prod.Producto_id, &prod.Producto_nombre,
 			&prod.Producto_codigo, &prod.Producto_margen,
 			&prod.Producto_precio, &prod.Producto_activado); err != nil {
-
 			return nil, fmt.Errorf("AllProducts: %v", err)
 		}
 		producto = append(producto, prod)
+	}
+
+	for i := range quantArray {
+		for j := range producto {
+			if producto[j].Producto_id == quantArray[i].Id {
+				producto[j].Cantidad = quantArray[i].Quantity
+			}
+		}
 	}
 
 	if err := rows.Err(); err != nil {
@@ -55,6 +89,7 @@ func AllProducts(db *sql.DB) ([]Producto, error) {
 
 	return producto, nil
 }
+
 func AddNewProduct(c echo.Context, name string, code int64, margin float64, price float64) error {
 	{
 		query := DB.QueryRow(`SELECT producto_id FROM producto WHERE producto_codigo = ?`, code)
@@ -66,7 +101,7 @@ func AddNewProduct(c echo.Context, name string, code int64, margin float64, pric
 	}
 
 	{
-		_, err := DB.Exec(`INSERT INTO producto
+		res, err := DB.Exec(`INSERT INTO producto
 		(producto_nombre, producto_codigo, producto_margen,
 		producto_precio, producto_activado) VALUES
 		(?, ?, ?, ?, ?)`, name, code, margin, price, 1)
@@ -74,12 +109,13 @@ func AddNewProduct(c echo.Context, name string, code int64, margin float64, pric
 			c.Response().Header().Add("HX-Trigger", "insertionerror")
 			return fmt.Errorf("AddNewProduct InsertInto %v", err)
 		}
+		fmt.Printf("%v \n", res)
 	}
 
 	return nil
 }
-func DisableProduct(id int64) error {
 
+func DisableProduct(id int64) error {
 	DB.QueryRow(`update producto set producto_activado = 0 where producto_id = ?;`, id)
 	return nil
 }

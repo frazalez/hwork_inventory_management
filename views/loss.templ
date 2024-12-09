@@ -6,38 +6,41 @@ import (
 "strconv"
 )
 
-templ PurchaseTable(contents []model.Entrada) {
+templ LossTable(contents []model.Salida) {
 <div x-data="data()" class="max-h-full overflow-y-scroll ">
   <div id="productsTableDiv" name="productsTable">
-    @PurchasesTableOnly(contents)
+    @LossTableOnly(contents)
   </div>
 </div>
-<button id="viewPurchases" name="viewPurchases" hx-get="/get-purchase-table" hx-target="#productsTableDiv"
-  hx-swap="innerHTML"
+<button id="viewLoss" name="viewLoss" hx-get="/get-loss-table" hx-target="#productsTableDiv" hx-swap="innerHTML"
   class="h-max w-max justify-self-start self-start bg-slate-500 bg-opacity-20 border border-slate-700 p-2">
-  Ver ventas
+  Ver mermas
 </button>
 <div id="productSearchSmall"></div>
-<div id="makePurchaseDiv">
-  @CreatePurchase()
+<div id="makeSaleDiv">
+  @CreateLoss()
 </div>
 }
 
-templ PurchasesTableOnly(contents []model.Entrada) {
+templ LossTableOnly(contents []model.Salida) {
 <table id="productsTable"
   class="max-h-full overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
   <thead class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
     <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">ID</th>
     <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Fecha</th>
+    <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Valor total</th>
+    <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Tipo</th>
     <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Usuario</th>
   </thead>
   <tbody x-ref="tbody">
     for i := range contents {
-    {{ vals := fmt.Sprintf("{\"purchaseId\": \"%v\"}", contents[i].Id) }}
+    {{ vals := fmt.Sprintf("{\"saleId\": \"%v\"}", contents[i].Id) }}
     <tr class="border-collapse border-slate-800 border cursor-pointer" hx-trigger="click" hx-vals={ vals }
-      hx-post="/get-purchase-table-detail" hx-target="#productsTableDiv">
+      hx-post="/get-loss-table-detail" hx-target="#productsTableDiv">
       <td class="border-slate-800 border p-2">{ strconv.FormatInt(contents[i].Id, 10) }</td>
       <td class="border-slate-800 border p-2">{ contents[i].Fecha }</td>
+      <td class="border-slate-800 border p-2">{ strconv.FormatInt(contents[i].Total, 10) }</td>
+      <td class="border-slate-800 border p-2">{ contents[i].Tipo }</td>
       <td class="border-slate-800 border p-2">{ contents[i].Usuario }</td>
     </tr>
     }
@@ -45,78 +48,84 @@ templ PurchasesTableOnly(contents []model.Entrada) {
 </table>
 }
 
-templ PurchasesTableJoin(contents []model.Producto_entrada_join) {
+templ LossTableJoin(contents []model.Producto_salida_join) {
 <table id="productsTable"
   class="max-h-full overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
   <thead class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
     <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Nombre</th>
     <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Codigo</th>
-    <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Precio Compra</th>
+    <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Precio</th>
     <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Cantidad</th>
+    <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Tipo Salida</th>
     <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Fecha</th>
-    <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Usuario</th>
+    <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Usuario Salida</th>
   </thead>
   <tbody x-ref="tbody">
     for i := range contents {
     <tr class="border-collapse border-slate-800 border">
       <td class="border-slate-800 border p-2">{ contents[i].Nombre }</td>
       <td class="border-slate-800 border p-2">{ strconv.FormatInt(contents[i].Codigo, 10) }</td>
-      <td class="border-slate-800 border p-2">{ strconv.FormatInt(contents[i].Codigo, 10) }</td>
+      <td class="border-slate-800 border p-2">{ strconv.FormatInt(contents[i].PrecioVenta, 10) }</td>
       <td class="border-slate-800 border p-2">{ strconv.FormatInt(contents[i].Cantidad, 10) }</td>
+      <td class="border-slate-800 border p-2">{ contents[i].TipoSalida }</td>
       <td class="border-slate-800 border p-2">{ contents[i].Fecha }</td>
-      <td class="border-slate-800 border p-2">{ contents[i].Usuario }</td>
+      <td class="border-slate-800 border p-2">{ contents[i].UsuarioSalida }</td>
     </tr>
     }
   </tbody>
 </table>
 }
 
-templ PurchasesTransacTable(contents []model.TransactionPurchase) {
+templ LossTransacTable(contents []model.TransactionProduct) {
 <table id="productsTable" class="overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all">
   <thead class="border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold">
     <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Nombre</th>
     <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Codigo</th>
-    <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Precio Compra</th>
+    <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Precio</th>
     <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Cantidad</th>
+    <th @click="sortByColumn" class="cursor-pointer select-none border-slate-800 border p-2">Tipo</th>
   </thead>
   <tbody x-ref="tbody">
     for i := range contents {
     <tr class="border-collapse border-slate-800 border">
       <td class="border-slate-800 border p-2">{ contents[i].Name }</td>
       <td class="border-slate-800 border p-2">{ strconv.FormatInt(contents[i].Code, 10) }</td>
-      <td class="border-slate-800 border p-2">
-        { strconv.FormatInt(contents[i].Price, 10) }
-      </td>
+      <td class="border-slate-800 border p-2">{ strconv.FormatInt(contents[i].Price, 10) }</td>
       <td class="border-slate-800 border p-2">{ strconv.FormatInt(contents[i].Quantity, 10) }</td>
+      <td class="border-slate-800 border p-2">{ strconv.FormatInt(contents[i].Type, 10) }</td>
     </tr>
     }
   </tbody>
 </table>
 }
 
-templ CreatePurchase() {
-<form id="createPurchase" hx-post="/create-purchase" hx-target="#productsTableDiv"
+templ CreateLoss() {
+<button id="startSale" name="startSale" hx-post="/start-loss" hx-target="#productsTableDiv" hx-swap="innerHTML"
+  class="bg-slate-500 bg-opacity-20 border border-slate-700 flex flex-col gap-4 align-middle justify-center mx-20">
+  Iniciar merma
+</button>
+<form id="createSale" hx-post="/create-loss" hx-target="#productsTableDiv"
   class="flex flex-col gap-4 align-middle justify-center mx-20">
-  <button id="startPurchase" name="startPurchase" hx-post="/start-purchase" hx-target="#productsTableDiv"
-    hx-swap="innerHTML" class="bg-slate-500 bg-opacity-20 border border-slate-700">
-    Iniciar compra
-  </button>
-  <p class="text-3xl font-bold">Hacer Compra</p>
-  <input required type="text" id="barcode" name="barcode" placeholder="Codigo de producto"
-    hx-post="/small-table-search-purchase" hx-trigger="input changed delay:500ms" hx-target="#productSearchSmall"
-    hx-indicator=".htmx-indicator" class="bg-slate-500 border-slate-700 p-1" />
-  <input required type="text" default="1" name="quantity" id="quantity" placeholder="Cantidad"
+  <p class="text-3xl font-bold">Hacer merma</p>
+  <input required type="text" id="barcode" name="barcode" placeholder="Codigo de producto" hx-post="/small-table-search"
+    hx-trigger="input changed delay:500ms" hx-target="#productSearchSmall" hx-indicator=".htmx-indicator"
     class="bg-slate-500 border-slate-700 p-1" />
+  <input required type="number" value="1" name="quantity" id="quantity" placeholder="Cantidad"
+    class="bg-slate-500 border-slate-700 p-1" />
+  <select required value="2" default="Merma" name="type" id="type" class="bg-slate-500 border-slate-700 p-1" readonly
+    hidden>
+    <option value="1">Venta</option>
+    <option value="2">Merma</option>
+  </select>
   <button type="submit">
-    Agregar
-    producto
+    Agregar producto
   </button>
-  <button id="completePurchase" name="completePurchase" hx-post="/complete-purchase" hx-target="#productsTableDiv"
+  <button type="button" id="completeSale" name="completeSale" hx-post="/complete-loss" hx-target="#productsTableDiv"
     hx-swap="innerHTML" class="bg-slate-500 bg-opacity-20 border border-slate-700">
-    Completar Compra
+    Completar Merma
   </button>
-  <p id="purchaseTotal" hx-trigger="purchaseTotal from:body" hx-target="this" hx-post="/calculateTotalPurchase"
-    hx-swap="textContent" class="size-fit"></p>
+  <p id="saleTotal" hx-trigger="saleTotal from:body" hx-target="this" hx-post="/calculateTotal" hx-swap="textContent"
+    class="size-fit"></p>
 </form>
 <p hx-trigger="duplicateError from:body" hx-get="/static/addUserDuplicate.html" id="errorDupe"
   class="text-red-600 text-center"></p>

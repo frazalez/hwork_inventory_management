@@ -34,6 +34,7 @@ func DefineRouting(e *echo.Echo) {
 	e.POST("/complete-loss", CompleteLossHandler)
 	e.POST("/calculateTotal", calculateTotalSaleHandler)
 	e.GET("/get-purchase-table", TablesPurchasesHandler)
+	e.POST("/get-purchase-table-detail", TablesPurchasesDetailHandler)
 	e.POST("/create-purchase", CreatePurchaseHandler)
 	e.POST("start-purchase", StartPurchaseHandler)
 	e.POST("/small-table-search-purchase", SmallPurchaseTableSearchHandler)

@@ -8,8 +8,10 @@ package views
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "inventoryManagement/model"
-import "strconv"
+import (
+	"inventoryManagement/model"
+	"strconv"
+)
 
 func ProductsTable(contents []model.Producto) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
@@ -32,7 +34,7 @@ func ProductsTable(contents []model.Producto) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div x-data=\"data()\" class=\"max-h-80 overflow-y-auto\"><table id=\"productsTable\" class=\"min-w-full table-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all\"><thead class=\"border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold\"><tr><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">ID</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Nombre</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Codigo</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Margen</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Precio</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Activo</th></tr></thead> <tbody x-ref=\"tbody\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div x-data=\"data()\" class=\"max-h-full overflow-y-auto\"><table id=\"productsTable\" class=\"min-w-full max-h-full table-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all\"><thead class=\"border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold\"><tr><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">ID</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Nombre</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Codigo</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Margen</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Precio</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Activo</th></tr></thead> <tbody x-ref=\"tbody\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -44,7 +46,7 @@ func ProductsTable(contents []model.Producto) templ.Component {
 			var templ_7745c5c3_Var2 string
 			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatInt(contents[i].Producto_id, 10))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 23, Col: 103}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 25, Col: 96}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 			if templ_7745c5c3_Err != nil {
@@ -57,7 +59,7 @@ func ProductsTable(contents []model.Producto) templ.Component {
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(contents[i].Producto_nombre)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 24, Col: 84}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 26, Col: 77}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
@@ -70,7 +72,7 @@ func ProductsTable(contents []model.Producto) templ.Component {
 			var templ_7745c5c3_Var4 string
 			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatInt(contents[i].Producto_codigo, 10))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 25, Col: 107}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 27, Col: 100}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
@@ -83,7 +85,7 @@ func ProductsTable(contents []model.Producto) templ.Component {
 			var templ_7745c5c3_Var5 string
 			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatFloat(contents[i].Producto_margen, 'f', 5, 64))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 26, Col: 117}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 29, Col: 72}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 			if templ_7745c5c3_Err != nil {
@@ -96,7 +98,7 @@ func ProductsTable(contents []model.Producto) templ.Component {
 			var templ_7745c5c3_Var6 string
 			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatFloat(contents[i].Producto_precio, 'f', 5, 64))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 28, Col: 117}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 32, Col: 72}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 			if templ_7745c5c3_Err != nil {
@@ -109,7 +111,7 @@ func ProductsTable(contents []model.Producto) templ.Component {
 			var templ_7745c5c3_Var7 string
 			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatBool(contents[i].Producto_activado))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 30, Col: 106}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 34, Col: 99}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 			if templ_7745c5c3_Err != nil {
@@ -149,7 +151,7 @@ func ProductsTableManager(contents []model.Producto) templ.Component {
 			templ_7745c5c3_Var8 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div x-data=\"data()\" class=\"max-h-80 overflow-y-auto\"><table id=\"productsTable\" class=\"max-h-60 overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all\"><thead class=\"border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold\"><tr><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">ID</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Nombre</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Codigo</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Margen</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Precio</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Activo</th></tr></thead> <tbody x-ref=\"tbody\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div x-data=\"data()\" class=\"max-h-full overflow-y-auto\"><table id=\"productsTable\" class=\"max-h-full overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all\"><thead class=\"border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold\"><tr><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">ID</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Nombre</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Codigo</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Margen</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Precio</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Activo</th></tr></thead> <tbody x-ref=\"tbody\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -161,7 +163,7 @@ func ProductsTableManager(contents []model.Producto) templ.Component {
 			var templ_7745c5c3_Var9 string
 			templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatInt(contents[i].Producto_id, 10))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 55, Col: 103}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 59, Col: 96}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 			if templ_7745c5c3_Err != nil {
@@ -174,7 +176,7 @@ func ProductsTableManager(contents []model.Producto) templ.Component {
 			var templ_7745c5c3_Var10 string
 			templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(contents[i].Producto_nombre)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 56, Col: 84}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 60, Col: 77}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 			if templ_7745c5c3_Err != nil {
@@ -187,7 +189,7 @@ func ProductsTableManager(contents []model.Producto) templ.Component {
 			var templ_7745c5c3_Var11 string
 			templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatInt(contents[i].Producto_codigo, 10))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 57, Col: 107}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 61, Col: 100}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 			if templ_7745c5c3_Err != nil {
@@ -200,7 +202,7 @@ func ProductsTableManager(contents []model.Producto) templ.Component {
 			var templ_7745c5c3_Var12 string
 			templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatFloat(contents[i].Producto_margen, 'f', 5, 64))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 58, Col: 117}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 63, Col: 72}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
 			if templ_7745c5c3_Err != nil {
@@ -213,7 +215,7 @@ func ProductsTableManager(contents []model.Producto) templ.Component {
 			var templ_7745c5c3_Var13 string
 			templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatFloat(contents[i].Producto_precio, 'f', 5, 64))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 60, Col: 117}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 66, Col: 72}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
 			if templ_7745c5c3_Err != nil {
@@ -226,7 +228,7 @@ func ProductsTableManager(contents []model.Producto) templ.Component {
 			var templ_7745c5c3_Var14 string
 			templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatBool(contents[i].Producto_activado))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 62, Col: 106}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 68, Col: 99}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
 			if templ_7745c5c3_Err != nil {
@@ -239,7 +241,7 @@ func ProductsTableManager(contents []model.Producto) templ.Component {
 			var templ_7745c5c3_Var15 string
 			templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatInt(contents[i].Producto_id, 10))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 66, Col: 115}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 71, Col: 104}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var15))
 			if templ_7745c5c3_Err != nil {
@@ -252,7 +254,7 @@ func ProductsTableManager(contents []model.Producto) templ.Component {
 			var templ_7745c5c3_Var16 string
 			templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatInt(contents[i].Producto_id, 10))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 74, Col: 115}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 80, Col: 104}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var16))
 			if templ_7745c5c3_Err != nil {
@@ -300,7 +302,7 @@ func ProductsTableAdmin(contents []model.Producto) templ.Component {
 			templ_7745c5c3_Var17 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div x-data=\"data()\" class=\"max-h-80 overflow-y-auto\"><table id=\"productsTable\" class=\"max-h-96 overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all\"><thead class=\"border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold\"><tr><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">ID</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Nombre</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Codigo</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Margen</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Precio</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Activo</th><th class=\"border-slate-800 border p-2\">Desactivar Producto</th><th class=\"border-slate-800 border p-2\">Activar Producto</th><th class=\"border-slate-800 border p-2\">Modificar Producto</th></tr></thead> <tbody x-ref=\"tbody\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div x-data=\"data()\" class=\"max-h-full overflow-y-auto\"><table id=\"productsTable\" class=\"max-h-full overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all\"><thead class=\"border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold\"><tr><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">ID</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Nombre</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Codigo</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Margen</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Precio</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Activo</th><th @click=\"sortByColumn\" class=\"cursor-pointer select-none border-slate-800 border p-2\">Cantidad</th><th class=\"border-slate-800 border p-2\">Desactivar Producto</th><th class=\"border-slate-800 border p-2\">Activar Producto</th><th class=\"border-slate-800 border p-2\">Modificar Producto</th></tr></thead> <tbody x-ref=\"tbody\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -312,7 +314,7 @@ func ProductsTableAdmin(contents []model.Producto) templ.Component {
 			var templ_7745c5c3_Var18 string
 			templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatInt(contents[i].Producto_id, 10))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 108, Col: 103}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 117, Col: 96}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var18))
 			if templ_7745c5c3_Err != nil {
@@ -325,7 +327,7 @@ func ProductsTableAdmin(contents []model.Producto) templ.Component {
 			var templ_7745c5c3_Var19 string
 			templ_7745c5c3_Var19, templ_7745c5c3_Err = templ.JoinStringErrs(contents[i].Producto_nombre)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 109, Col: 84}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 118, Col: 77}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var19))
 			if templ_7745c5c3_Err != nil {
@@ -338,7 +340,7 @@ func ProductsTableAdmin(contents []model.Producto) templ.Component {
 			var templ_7745c5c3_Var20 string
 			templ_7745c5c3_Var20, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatInt(contents[i].Producto_codigo, 10))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 110, Col: 107}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 119, Col: 100}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var20))
 			if templ_7745c5c3_Err != nil {
@@ -351,7 +353,7 @@ func ProductsTableAdmin(contents []model.Producto) templ.Component {
 			var templ_7745c5c3_Var21 string
 			templ_7745c5c3_Var21, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatFloat(contents[i].Producto_margen, 'f', 5, 64))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 111, Col: 117}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 121, Col: 72}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var21))
 			if templ_7745c5c3_Err != nil {
@@ -364,7 +366,7 @@ func ProductsTableAdmin(contents []model.Producto) templ.Component {
 			var templ_7745c5c3_Var22 string
 			templ_7745c5c3_Var22, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatFloat(contents[i].Producto_precio, 'f', 5, 64))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 113, Col: 117}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 124, Col: 72}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var22))
 			if templ_7745c5c3_Err != nil {
@@ -377,9 +379,22 @@ func ProductsTableAdmin(contents []model.Producto) templ.Component {
 			var templ_7745c5c3_Var23 string
 			templ_7745c5c3_Var23, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatBool(contents[i].Producto_activado))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 115, Col: 106}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 126, Col: 99}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var23))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</td><td class=\"border-slate-800 border p-2\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var24 string
+			templ_7745c5c3_Var24, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatInt(contents[i].Cantidad, 10))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 127, Col: 93}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var24))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -387,12 +402,12 @@ func ProductsTableAdmin(contents []model.Producto) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var24 string
-			templ_7745c5c3_Var24, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatInt(contents[i].Producto_id, 10))
+			var templ_7745c5c3_Var25 string
+			templ_7745c5c3_Var25, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatInt(contents[i].Producto_id, 10))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 119, Col: 115}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 130, Col: 104}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var24))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var25))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -400,12 +415,12 @@ func ProductsTableAdmin(contents []model.Producto) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var25 string
-			templ_7745c5c3_Var25, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatInt(contents[i].Producto_id, 10))
+			var templ_7745c5c3_Var26 string
+			templ_7745c5c3_Var26, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatInt(contents[i].Producto_id, 10))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 127, Col: 115}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 139, Col: 104}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var25))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var26))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -413,12 +428,12 @@ func ProductsTableAdmin(contents []model.Producto) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var26 string
-			templ_7745c5c3_Var26, templ_7745c5c3_Err = templ.JoinStringErrs(contents[i].Producto_nombre)
+			var templ_7745c5c3_Var27 string
+			templ_7745c5c3_Var27, templ_7745c5c3_Err = templ.JoinStringErrs(contents[i].Producto_nombre)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 134, Col: 91}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 145, Col: 80}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var26))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var27))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -426,12 +441,12 @@ func ProductsTableAdmin(contents []model.Producto) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var27 string
-			templ_7745c5c3_Var27, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatInt(contents[i].Producto_codigo, 10))
+			var templ_7745c5c3_Var28 string
+			templ_7745c5c3_Var28, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatInt(contents[i].Producto_codigo, 10))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 135, Col: 114}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 146, Col: 103}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var27))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var28))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -439,13 +454,12 @@ func ProductsTableAdmin(contents []model.Producto) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var28 string
-			templ_7745c5c3_Var28, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatFloat(contents[i].Producto_margen, 'f',
-				5, 64))
+			var templ_7745c5c3_Var29 string
+			templ_7745c5c3_Var29, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatFloat(contents[i].Producto_margen, 'f', 5, 64))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 137, Col: 34}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 147, Col: 116}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var28))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var29))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -453,13 +467,12 @@ func ProductsTableAdmin(contents []model.Producto) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var29 string
-			templ_7745c5c3_Var29, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatFloat(contents[i].Producto_precio, 'f',
-				5, 64))
+			var templ_7745c5c3_Var30 string
+			templ_7745c5c3_Var30, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatFloat(contents[i].Producto_precio, 'f', 5, 64))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 139, Col: 34}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 149, Col: 115}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var29))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var30))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -500,12 +513,12 @@ func ProductsTableSmall(contents []model.ProductSmall) templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var30 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var30 == nil {
-			templ_7745c5c3_Var30 = templ.NopComponent
+		templ_7745c5c3_Var31 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var31 == nil {
+			templ_7745c5c3_Var31 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"max-h-[80vh] overflow-y-auto\"><table id=\"productsTable\" class=\"sortable max-h-60 overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all\"><thead><tr class=\"border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold\"><th class=\"cursor-pointer border-slate-800 border p-2\">Nombre</th><th class=\"cursor-pointer border-slate-800 border p-2\">Codigo</th><th class=\"cursor-pointer border-slate-800 border p-2\">Precio</th></tr></thead> ")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"max-h-full overflow-y-auto\"><table id=\"productsTable\" class=\"sortable max-h-full overflow-y-auto bg-slate-400 bg-opacity-20 shadow shadow-slate-900 p-8 transition-all\"><thead><tr class=\"border-collapse border-slate-800 border bg-slate-400 bg-opacity-30 font-semibold\"><th class=\"cursor-pointer border-slate-800 border p-2\">Nombre</th><th class=\"cursor-pointer border-slate-800 border p-2\">Codigo</th><th class=\"cursor-pointer border-slate-800 border p-2\">Precio</th></tr></thead> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -514,23 +527,10 @@ func ProductsTableSmall(contents []model.ProductSmall) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var31 string
-			templ_7745c5c3_Var31, templ_7745c5c3_Err = templ.JoinStringErrs(contents[i].Producto_nombre)
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 169, Col: 80}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var31))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</td><td class=\"border-slate-800 border p-2\">")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
 			var templ_7745c5c3_Var32 string
-			templ_7745c5c3_Var32, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatInt(contents[i].Producto_codigo, 10))
+			templ_7745c5c3_Var32, templ_7745c5c3_Err = templ.JoinStringErrs(contents[i].Producto_nombre)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 170, Col: 103}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 181, Col: 75}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var32))
 			if templ_7745c5c3_Err != nil {
@@ -541,11 +541,24 @@ func ProductsTableSmall(contents []model.ProductSmall) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var33 string
-			templ_7745c5c3_Var33, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatFloat(contents[i].Producto_precio, 'f', 5, 64))
+			templ_7745c5c3_Var33, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatInt(contents[i].Producto_codigo, 10))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 171, Col: 113}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 182, Col: 98}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var33))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</td><td class=\"border-slate-800 border p-2\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var34 string
+			templ_7745c5c3_Var34, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatFloat(contents[i].Producto_precio, 'f', 5, 64))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/products.templ`, Line: 183, Col: 108}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var34))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -578,9 +591,9 @@ func CreateProduct() templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var34 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var34 == nil {
-			templ_7745c5c3_Var34 = templ.NopComponent
+		templ_7745c5c3_Var35 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var35 == nil {
+			templ_7745c5c3_Var35 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form id=\"createProduct\" hx-post=\"/create-product\" hx-on::after-request=\"this.reset()\" hx-swap=\"none\" class=\"flex flex-col gap-4\"><p class=\"text-2x1 font-bold\">Crear Producto</p><input required type=\"text\" name=\"nombre\" placeholder=\"Nombre\" class=\"bg-slate-500 border-slate-700 p-1\"> <input required type=\"text\" name=\"codigo\" placeholder=\"Codigo de barra\" class=\"bg-slate-500 border border-slate-700 p-1\"> <input required type=\"text\" name=\"margen\" placeholder=\"Margen de venta\" class=\"bg-slate-500 border border-slate-700 p-1\"> <input required type=\"text\" name=\"precio\" placeholder=\"Precio Inicial\" class=\"bg-slate-500 border border-slate-700 p-1\"> <button type=\"submit\" class=\"bg-slate-500 bg-opacity-20 border border-slate-700\">Crear Producto</button></form><p hx-trigger=\"duplicateError from:body\" hx-get=\"/static/addProductDuplicate.html\" id=\"errorDupe\" class=\"text-red-600 text-center\"></p><p hx-trigger=\"invalidError from:body\" hx-get=\"/static/addProductInvalid.html\" id=\"errorInvalid\" class=\"text-red-600 text-center\"></p><p hx-trigger=\"insertError from:body\" hx-get=\"/static/addProductInsert.html\" id=\"errorUserInsert\" class=\"text-red-600 text-center\"></p>")
